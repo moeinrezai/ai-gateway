@@ -35,3 +35,11 @@ async def get_current_user(
     session_data: tuple[User, Session] = Depends(get_current_session),
 ) -> User:
     return session_data[0]
+
+
+async def get_refresh_token_from_cookie(
+    refresh_token: str | None = Cookie(None, alias="refresh_token"),
+) -> str:
+    if not refresh_token:
+        raise AuthenticationError("No refresh token provided.")
+    return refresh_token

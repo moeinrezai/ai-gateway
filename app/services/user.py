@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.exceptions.auth import UserAlreadyExistsError
@@ -14,6 +16,9 @@ class UserService:
 
     async def get_user_by_email(self, email: str) -> User | None:
         return await self.user_repo.get_by_email(email)
+
+    async def get_user_by_id(self, user_id: uuid.UUID) -> User | None:
+        return await self.user_repo.get_by_id(user_id)
 
     async def create_user(self, email: str, password: str, role_name: str = "user") -> User:
         existing_user = await self.get_user_by_email(email)

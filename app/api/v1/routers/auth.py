@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Request, Response
 
-from app.api.dependencies.auth import get_current_session
+from app.api.dependencies.auth import get_current_session, get_refresh_token_from_cookie
 from app.api.dependencies.services import get_auth_service, get_session_service
 from app.core.config import settings
 from app.models.session import Session
@@ -91,3 +91,14 @@ async def logout(
     await session_service.revoke_session(user.id, current_session.id)
     _clear_auth_cookies(response)
     return SuccessResponse(message="Logged out successfully.")
+
+
+@router.post("/refresh", response_model=SuccessResponse)
+async def refresh(
+    response: Response,
+    refresh_token_str: str = Depends(get_refresh_token_from_cookie),
+    auth_service: AuthService = Depends(get_auth_service),
+):
+    new_access_token, new_refresh_token = await auth_service.refresh_tokens(refresh_token_str)
+    _set_auth_cookies(response, new_access_token, new_refresh_token)
+    return SuccessResponse(message="Tokens refreshed successfully.")
