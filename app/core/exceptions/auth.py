@@ -29,3 +29,13 @@ class PermissionDeniedError(AppException):
             message=message,
             details=details,
         )
+
+
+class UserAlreadyExistsError(AppException):
+    def __init__(self, message: str = "User with this email already exists.", details: dict | None = None):
+        super().__init__(
+            status_code=409,
+            error_code="USER_ALREADY_EXISTS",
+            message=message,
+            details=details,
+        )
