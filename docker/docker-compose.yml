@@ -35,6 +35,27 @@ services:
     networks:
       - ai-gateway-network
 
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: ai-gateway-backend
+    env_file:
+      - ../.env
+    environment:
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ai-gateway-network
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   redis_data:

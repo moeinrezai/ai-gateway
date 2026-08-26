@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 FROM python:3.12-slim AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -7,19 +5,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1
 
 WORKDIR /app
-
-
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
-
-
+RUN pip install --no-cache-dir uv
 COPY pyproject.toml uv.lock ./
-
-
 RUN uv sync --frozen --no-dev
 
 
 COPY . .
-
 
 RUN useradd --create-home --shell /bin/bash appuser && \
     chown -R appuser:appuser /app
