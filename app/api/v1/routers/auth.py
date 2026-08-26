@@ -1,22 +1,28 @@
 from fastapi import APIRouter, Depends, Request, Response
-
 from app.api.dependencies.auth import get_current_session, get_refresh_token_from_cookie
-from app.api.dependencies.services import get_auth_service, get_session_service
 from app.core.config import settings
 from app.models.session import Session
 from app.models.user import User
-from app.schemas.auth import LoginRequest, RegisterRequest
 from app.schemas.common import SuccessResponse
 from app.schemas.user import UserRead
 from app.services.auth import AuthService
 from app.services.session import SessionService
+from app.api.dependencies.services import (
+    get_auth_service,
+    get_session_service,
+    get_user_service,
+)
+from app.schemas.auth import ChangePasswordRequest, LoginRequest, RegisterRequest
+from app.services.user import UserService
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
-def _set_auth_cookies(response: Response, access_token: str, refresh_token: str) -> None:
+def _set_auth_cookies(
+    response: Response, access_token: str, refresh_token: str
+) -> None:
     is_secure = settings.APP_ENV == "production"
-    
+
     response.set_cookie(
         key="access_token",
         value=access_token,
@@ -26,7 +32,7 @@ def _set_auth_cookies(response: Response, access_token: str, refresh_token: str)
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         path="/",
     )
-    
+
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
@@ -40,7 +46,9 @@ def _set_auth_cookies(response: Response, access_token: str, refresh_token: str)
 
 def _clear_auth_cookies(response: Response) -> None:
     response.delete_cookie(key="access_token", path="/")
-    response.delete_cookie(key="refresh_token", path=f"{settings.APP_API_V1_PREFIX}/auth/refresh")
+    response.delete_cookie(
+        key="refresh_token", path=f"{settings.APP_API_V1_PREFIX}/auth/refresh"
+    )
 
 
 def _get_client_ip(request: Request) -> str:
@@ -99,6 +107,26 @@ async def refresh(
     refresh_token_str: str = Depends(get_refresh_token_from_cookie),
     auth_service: AuthService = Depends(get_auth_service),
 ):
-    new_access_token, new_refresh_token = await auth_service.refresh_tokens(refresh_token_str)
+    new_access_token, new_refresh_token = await auth_service.refresh_tokens(
+        refresh_token_str
+    )
     _set_auth_cookies(response, new_access_token, new_refresh_token)
     return SuccessResponse(message="Tokens refreshed successfully.")
+
+
+@router.post("/change-password", response_model=SuccessResponse)
+async def change_password(
+    payload: ChangePasswordRequest,
+    session_data: tuple[User, Session] = Depends(get_current_session),
+    user_service: UserService = Depends(get_user_service),
+    session_service: SessionService = Depends(get_session_service),
+):
+    user, current_session = session_data
+
+    await user_service.change_password(user, payload.old_password, payload.new_password)
+
+    await session_service.revoke_other_sessions(user.id, current_session.id)
+
+    return SuccessResponse(
+        message="Password changed successfully. Other sessions have been logged out."
+    )

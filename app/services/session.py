@@ -40,3 +40,14 @@ class SessionService:
         for session in sessions:
             await self.session_repo.revoke(session.id)
             await self.token_repo.revoke_by_session_id(session.id)
+
+    async def revoke_other_sessions(self, user_id: uuid.UUID, current_session_id: uuid.UUID) -> None:
+        """
+        Revokes all active sessions for a user EXCEPT the current one.
+        Used for security hardening after password change.
+        """
+        sessions = await self.session_repo.get_active_by_user_id(user_id)
+        for session in sessions:
+            if session.id != current_session_id:
+                await self.session_repo.revoke(session.id)
+                await self.token_repo.revoke_by_session_id(session.id)
