@@ -18,7 +18,7 @@ async def get_current_session(
 
     payload = decode_token(access_token, "access")
     session_id = payload.get("sid")
-    
+
     if not session_id:
         raise InvalidTokenError("Invalid token payload.")
 

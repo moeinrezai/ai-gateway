@@ -18,7 +18,11 @@ class AIProviderError(AppException):
 
 
 class AIProviderTimeoutError(AIProviderError):
-    def __init__(self, provider: str | None = None, message: str = "AI provider request timed out."):
+    def __init__(
+        self,
+        provider: str | None = None,
+        message: str = "AI provider request timed out.",
+    ):
         super().__init__(
             status_code=504,
             error_code="AI_PROVIDER_TIMEOUT",
@@ -28,7 +32,11 @@ class AIProviderTimeoutError(AIProviderError):
 
 
 class AIProviderUnavailableError(AIProviderError):
-    def __init__(self, provider: str | None = None, message: str = "AI provider is currently unavailable."):
+    def __init__(
+        self,
+        provider: str | None = None,
+        message: str = "AI provider is currently unavailable.",
+    ):
         super().__init__(
             status_code=503,
             error_code="AI_PROVIDER_UNAVAILABLE",
@@ -38,7 +46,11 @@ class AIProviderUnavailableError(AIProviderError):
 
 
 class AIProviderAuthenticationError(AIProviderError):
-    def __init__(self, provider: str | None = None, message: str = "AI provider authentication failed."):
+    def __init__(
+        self,
+        provider: str | None = None,
+        message: str = "AI provider authentication failed.",
+    ):
         super().__init__(
             status_code=502,
             error_code="AI_PROVIDER_AUTH_ERROR",

@@ -1,6 +1,11 @@
 from abc import ABC, abstractmethod
 
-from app.ai.schemas import ChatRequest, ChatResponse, GenerationRequest, GenerationResponse
+from app.ai.schemas import (
+    ChatRequest,
+    ChatResponse,
+    GenerationRequest,
+    GenerationResponse,
+)
 
 
 class BaseAIProvider(ABC):

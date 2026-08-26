@@ -5,7 +5,6 @@ from app.ai.schemas import AIProviderType
 from app.core.config import settings
 from app.core.exceptions.ai import AIInvalidModelError
 
-
 ALLOWED_MODELS = {
     "gpt-3.5-turbo": AIProviderType.OPENAI,
     "gpt-4": AIProviderType.OPENAI,

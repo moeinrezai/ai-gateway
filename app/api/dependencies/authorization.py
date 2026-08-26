@@ -16,10 +16,10 @@ class RequirePermission:
         if current_user.role.name == "superadmin":
             return current_user
         user_permissions = {perm.codename for perm in current_user.role.permissions}
-        
+
         if self.required_permission not in user_permissions:
             raise PermissionDeniedError(
                 message=f"Missing required permission: {self.required_permission}"
             )
-            
+
         return current_user

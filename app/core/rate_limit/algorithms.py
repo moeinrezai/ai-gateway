@@ -50,7 +50,7 @@ async def check_rate_limit(
     """
     Checks if the request is within the rate limit.
     Raises RateLimitExceededError if limit is exceeded.
-    
+
     Args:
         redis: Redis client instance
         key: Unique identifier for the rate limit bucket (e.g., "rl:ip:192.168.1.1")
@@ -58,7 +58,7 @@ async def check_rate_limit(
         window: Time window in seconds
     """
     now = time.time()
-    
+
     result = await redis.eval(
         SLIDING_WINDOW_LUA_SCRIPT,
         1,  # number of keys
@@ -67,9 +67,9 @@ async def check_rate_limit(
         window,
         now,
     )
-    
+
     allowed, retry_after = result[0], result[1]
-    
+
     if not allowed:
         raise RateLimitExceededError(
             message=f"Rate limit exceeded. Try again in {int(retry_after)} seconds.",

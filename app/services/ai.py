@@ -1,7 +1,12 @@
 from structlog import get_logger
 
 from app.ai.router import ai_router
-from app.ai.schemas import ChatRequest, ChatResponse, GenerationRequest, GenerationResponse
+from app.ai.schemas import (
+    ChatRequest,
+    ChatResponse,
+    GenerationRequest,
+    GenerationResponse,
+)
 from app.core.exceptions.ai import AIPromptTooLargeError
 
 logger = get_logger(__name__)

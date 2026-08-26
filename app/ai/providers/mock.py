@@ -1,7 +1,13 @@
 import uuid
 
 from app.ai.providers.base import BaseAIProvider
-from app.ai.schemas import ChatMessage, ChatRequest, ChatResponse, GenerationRequest, GenerationResponse
+from app.ai.schemas import (
+    ChatMessage,
+    ChatRequest,
+    ChatResponse,
+    GenerationRequest,
+    GenerationResponse,
+)
 
 
 class MockProvider(BaseAIProvider):

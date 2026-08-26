@@ -20,14 +20,18 @@ class UserService:
     async def get_user_by_id(self, user_id: uuid.UUID) -> User | None:
         return await self.user_repo.get_by_id(user_id)
 
-    async def create_user(self, email: str, password: str, role_name: str = "user") -> User:
+    async def create_user(
+        self, email: str, password: str, role_name: str = "user"
+    ) -> User:
         existing_user = await self.get_user_by_email(email)
         if existing_user:
             raise UserAlreadyExistsError()
 
         role = await self.role_repo.get_by_name(role_name)
         if not role:
-            raise ValueError(f"Role '{role_name}' not found in database. Please seed the database first.")
+            raise ValueError(
+                f"Role '{role_name}' not found in database. Please seed the database first."
+            )
 
         hashed_password = hash_password(password)
         user_data = {
@@ -35,10 +39,12 @@ class UserService:
             "hashed_password": hashed_password,
             "role_id": role.id,
         }
-        
+
         return await self.user_repo.create(user_data)
 
-    async def change_password(self, user: User, old_password: str, new_password: str) -> None:
+    async def change_password(
+        self, user: User, old_password: str, new_password: str
+    ) -> None:
         # 1. Verify old password
         # Note: verify_password raises AuthenticationError if invalid
         verify_password(user.hashed_password, old_password)
@@ -48,9 +54,9 @@ class UserService:
 
         # 3. Update in DB
         user.hashed_password = new_hashed_password
-        # Since we are using the same session, and object is attached, 
-        # we just need to ensure it's flushed. 
-        # However, our Repository pattern usually handles updates. 
+        # Since we are using the same session, and object is attached,
+        # we just need to ensure it's flushed.
+        # However, our Repository pattern usually handles updates.
         # Let's add an update method to UserRepository or handle it here.
         # For simplicity and keeping logic in Service:
         await self.user_repo.update(user)

@@ -68,12 +68,12 @@ def decode_token(token: str, expected_type: str) -> dict:
             algorithms=[settings.JWT_ALGORITHM],
             options={"verify_exp": True},
         )
-        
+
         if payload.get("type") != expected_type:
             raise InvalidTokenError("Invalid token type.")
-            
+
         return payload
-        
+
     except jwt.ExpiredSignatureError:
         raise InvalidTokenError("Token has expired.")
     except jwt.InvalidTokenError:

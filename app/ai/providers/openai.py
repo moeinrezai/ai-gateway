@@ -3,7 +3,13 @@ import uuid
 import httpx
 
 from app.ai.providers.base import BaseAIProvider
-from app.ai.schemas import ChatMessage, ChatRequest, ChatResponse, GenerationRequest, GenerationResponse
+from app.ai.schemas import (
+    ChatMessage,
+    ChatRequest,
+    ChatResponse,
+    GenerationRequest,
+    GenerationResponse,
+)
 from app.core.config import settings
 from app.core.exceptions.ai import (
     AIInvalidModelError,
@@ -21,7 +27,9 @@ class OpenAIProvider(BaseAIProvider):
         self.default_model = settings.AI_DEFAULT_MODEL
 
         if not self.api_key:
-            raise AIProviderAuthenticationError("openai", "OpenAI API key is not configured.")
+            raise AIProviderAuthenticationError(
+                "openai", "OpenAI API key is not configured."
+            )
 
     def _get_headers(self) -> dict[str, str]:
         return {
@@ -37,7 +45,10 @@ class OpenAIProvider(BaseAIProvider):
                     headers=self._get_headers(),
                     json={
                         "model": request.model,
-                        "messages": [{"role": msg.role, "content": msg.content} for msg in request.messages],
+                        "messages": [
+                            {"role": msg.role, "content": msg.content}
+                            for msg in request.messages
+                        ],
                         "temperature": request.temperature,
                         "max_tokens": request.max_tokens,
                     },
@@ -50,7 +61,9 @@ class OpenAIProvider(BaseAIProvider):
                 elif response.status_code >= 500:
                     raise AIProviderUnavailableError("openai")
                 elif response.status_code != 200:
-                    raise AIProviderUnavailableError("openai", f"Unexpected status code: {response.status_code}")
+                    raise AIProviderUnavailableError(
+                        "openai", f"Unexpected status code: {response.status_code}"
+                    )
 
                 data = response.json()
                 choice = data["choices"][0]
@@ -93,7 +106,9 @@ class OpenAIProvider(BaseAIProvider):
                 elif response.status_code >= 500:
                     raise AIProviderUnavailableError("openai")
                 elif response.status_code != 200:
-                    raise AIProviderUnavailableError("openai", f"Unexpected status code: {response.status_code}")
+                    raise AIProviderUnavailableError(
+                        "openai", f"Unexpected status code: {response.status_code}"
+                    )
 
                 data = response.json()
                 choice = data["choices"][0]

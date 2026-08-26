@@ -12,7 +12,7 @@ class UserRepository(BaseRepository[User]):
     async def get_by_email(self, email: str) -> User | None:
         result = await self.db.execute(select(User).where(User.email == email))
         return result.scalars().first()
-    
+
         async def update(self, user: User) -> User:
             await self.db.flush()
             await self.db.refresh(user)

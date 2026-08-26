@@ -15,6 +15,6 @@ async def get_my_profile(current_user: User = Depends(get_current_user)):
 
 @router.get("/admin-only", response_model=dict)
 async def admin_only_endpoint(
-    current_user: User = Depends(RequirePermission("admin:manage-users"))
+    current_user: User = Depends(RequirePermission("admin:manage-users")),
 ):
     return {"message": f"Welcome Admin! Your email is {current_user.email}"}

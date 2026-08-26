@@ -33,11 +33,13 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(RateLimitExceededError)
-    async def rate_limit_exception_handler(request: Request, exc: RateLimitExceededError):
+    async def rate_limit_exception_handler(
+        request: Request, exc: RateLimitExceededError
+    ):
         headers = {}
         if exc.retry_after:
             headers["Retry-After"] = str(exc.retry_after)
-            
+
         return JSONResponse(
             status_code=exc.status_code,
             content={
@@ -66,7 +68,9 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(RequestValidationError)
-    async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    async def validation_exception_handler(
+        request: Request, exc: RequestValidationError
+    ):
         return JSONResponse(
             status_code=422,
             content={

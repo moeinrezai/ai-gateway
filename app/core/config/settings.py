@@ -4,7 +4,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
 
-    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
@@ -12,8 +11,10 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-
-    APP_ENV: str = Field(default="development", description="Environment: development, testing, production")
+    APP_ENV: str = Field(
+        default="development",
+        description="Environment: development, testing, production",
+    )
     APP_DEBUG: bool = Field(default=True, description="Enable debug mode")
     APP_NAME: str = Field(default="AI Gateway")
     APP_API_V1_PREFIX: str = Field(default="/api/v1")
@@ -33,7 +34,6 @@ class Settings(BaseSettings):
             f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
         )
 
-
     REDIS_HOST: str = Field(default="localhost")
     REDIS_PORT: int = Field(default=6379)
     REDIS_PASSWORD: SecretStr | None = Field(default=None)
@@ -46,18 +46,19 @@ class Settings(BaseSettings):
         auth = f":{pwd}@" if pwd else ""
         return f"redis://{auth}{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
 
-
-    JWT_SECRET_KEY: SecretStr = Field(default=SecretStr("super-secret-key-change-in-production"))
+    JWT_SECRET_KEY: SecretStr = Field(
+        default=SecretStr("super-secret-key-change-in-production")
+    )
     JWT_ALGORITHM: str = Field(default="HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=15)
     REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=7)
 
-
     OPENAI_API_KEY: SecretStr = Field(default=SecretStr(""))
     OPENAI_BASE_URL: str = Field(default="https://api.openai.com/v1")
-    AI_REQUEST_TIMEOUT: int = Field(default=30, description="Timeout in seconds for AI provider requests")
+    AI_REQUEST_TIMEOUT: int = Field(
+        default=30, description="Timeout in seconds for AI provider requests"
+    )
     AI_DEFAULT_MODEL: str = Field(default="gpt-3.5-turbo")
-
 
 
 settings = Settings()

@@ -5,7 +5,11 @@ from app.api.dependencies.auth import (
 )
 from app.api.dependencies.authorization import RequirePermission
 from app.api.dependencies.db import get_db
-from app.api.dependencies.rate_limit import AIRateLimiter, AuthRateLimiter, IPRateLimiter
+from app.api.dependencies.rate_limit import (
+    AIRateLimiter,
+    AuthRateLimiter,
+    IPRateLimiter,
+)
 from app.api.dependencies.services import (
     get_ai_service,
     get_auth_service,

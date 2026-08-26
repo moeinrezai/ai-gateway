@@ -3,7 +3,6 @@ from argon2.exceptions import VerifyMismatchError, VerificationError, InvalidHas
 
 from app.core.exceptions import AuthenticationError
 
-
 password_hasher = PasswordHasher()
 
 

@@ -42,7 +42,9 @@ def setup_logging() -> None:
 
     root_logger = logging.getLogger()
     root_logger.addHandler(handler)
-    root_logger.setLevel(logging.INFO if settings.APP_ENV == "production" else logging.DEBUG)
+    root_logger.setLevel(
+        logging.INFO if settings.APP_ENV == "production" else logging.DEBUG
+    )
 
     logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
     logging.getLogger("sqlalchemy.engine").setLevel(
