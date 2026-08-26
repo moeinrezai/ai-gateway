@@ -1,5 +1,6 @@
 from app.schemas.auth import LoginRequest, RegisterRequest
 from app.schemas.common import SuccessResponse
+from app.schemas.session import SessionRead
 from app.schemas.user import UserCreate, UserRead
 
 __all__ = [
@@ -8,4 +9,5 @@ __all__ = [
     "SuccessResponse",
     "UserCreate",
     "UserRead",
+    "SessionRead",
 ]

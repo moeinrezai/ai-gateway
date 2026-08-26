@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime, timezone
 
 from sqlalchemy import select, update
@@ -19,6 +20,14 @@ class RefreshTokenRepository(BaseRepository[RefreshToken]):
         await self.db.execute(
             update(RefreshToken)
             .where(RefreshToken.jti == jti)
+            .values(revoked_at=datetime.now(timezone.utc))
+        )
+        await self.db.flush()
+
+    async def revoke_by_session_id(self, session_id: uuid.UUID) -> None:
+        await self.db.execute(
+            update(RefreshToken)
+            .where(RefreshToken.session_id == session_id, RefreshToken.revoked_at.is_(None))
             .values(revoked_at=datetime.now(timezone.utc))
         )
         await self.db.flush()

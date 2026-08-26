@@ -4,14 +4,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.dependencies.db import get_db
 from app.core.exceptions import AuthenticationError, InvalidTokenError
 from app.core.security.jwt import decode_token
+from app.models.session import Session
 from app.models.user import User
 from app.repositories.session import SessionRepository
 
 
-async def get_current_user(
+async def get_current_session(
     access_token: str | None = Cookie(None, alias="access_token"),
     db: AsyncSession = Depends(get_db),
-) -> User:
+) -> tuple[User, Session]:
     if not access_token:
         raise AuthenticationError("Not authenticated. No access token provided.")
 
@@ -27,4 +28,10 @@ async def get_current_user(
     if not session:
         raise InvalidTokenError("Session is invalid, expired, or revoked.")
 
-    return session.user
+    return session.user, session
+
+
+async def get_current_user(
+    session_data: tuple[User, Session] = Depends(get_current_session),
+) -> User:
+    return session_data[0]

@@ -1,10 +1,15 @@
 from fastapi import APIRouter, Depends, Request, Response
 
-from app.api.dependencies.services import get_auth_service
+from app.api.dependencies.auth import get_current_session
+from app.api.dependencies.services import get_auth_service, get_session_service
 from app.core.config import settings
+from app.models.session import Session
+from app.models.user import User
 from app.schemas.auth import LoginRequest, RegisterRequest
+from app.schemas.common import SuccessResponse
 from app.schemas.user import UserRead
 from app.services.auth import AuthService
+from app.services.session import SessionService
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -33,6 +38,11 @@ def _set_auth_cookies(response: Response, access_token: str, refresh_token: str)
     )
 
 
+def _clear_auth_cookies(response: Response) -> None:
+    response.delete_cookie(key="access_token", path="/")
+    response.delete_cookie(key="refresh_token", path=f"{settings.APP_API_V1_PREFIX}/auth/refresh")
+
+
 def _get_client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
@@ -50,7 +60,6 @@ async def register(
         ip=_get_client_ip(request),
         user_agent=request.headers.get("user-agent"),
     )
-    
     _set_auth_cookies(response, access_token, refresh_token)
     return user
 
@@ -68,6 +77,17 @@ async def login(
         ip=_get_client_ip(request),
         user_agent=request.headers.get("user-agent"),
     )
-    
     _set_auth_cookies(response, access_token, refresh_token)
     return user
+
+
+@router.post("/logout", response_model=SuccessResponse)
+async def logout(
+    response: Response,
+    session_data: tuple[User, Session] = Depends(get_current_session),
+    session_service: SessionService = Depends(get_session_service),
+):
+    user, current_session = session_data
+    await session_service.revoke_session(user.id, current_session.id)
+    _clear_auth_cookies(response)
+    return SuccessResponse(message="Logged out successfully.")
