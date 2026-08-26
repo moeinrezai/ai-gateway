@@ -1,3 +1,11 @@
+from app.core.exceptions.ai import (
+    AIInvalidModelError,
+    AIPromptTooLargeError,
+    AIProviderAuthenticationError,
+    AIProviderError,
+    AIProviderTimeoutError,
+    AIProviderUnavailableError,
+)
 from app.core.exceptions.auth import (
     AuthenticationError,
     InvalidTokenError,
@@ -15,5 +23,11 @@ __all__ = [
     "PermissionDeniedError",
     "UserAlreadyExistsError",
     "RateLimitExceededError",
+    "AIProviderError",
+    "AIProviderTimeoutError",
+    "AIProviderUnavailableError",
+    "AIProviderAuthenticationError",
+    "AIInvalidModelError",
+    "AIPromptTooLargeError",
     "register_exception_handlers",
 ]
