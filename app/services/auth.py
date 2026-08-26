@@ -103,7 +103,7 @@ class AuthService:
         return user, session, access_token, refresh_token
 
     async def refresh_tokens(self, refresh_token_str: str) -> tuple[str, str]:
-
+        # 1. Decode and validate signature/expiration
         payload = decode_token(refresh_token_str, "refresh")
         jti = payload["jti"]
         session_id = payload["sid"]
