@@ -15,13 +15,9 @@ class RefreshToken(UUIDMixin, TimestampMixin, Base):
     __tablename__ = "refresh_tokens"
 
     session_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), index=True, nullable=False)
-    jti: Mapped[uuid.UUID] = mapped_column(String(36), unique=True, index=True, nullable=False)
-    hashed_token: Mapped[str] = mapped_column(String(255), nullable=False)
+    jti: Mapped[str] = mapped_column(String(36), unique=True, index=True, nullable=False)
     
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     session: Mapped["Session"] = relationship(back_populates="refresh_tokens")
-
-    def __repr__(self) -> str:
-        return f"<RefreshToken(id={self.id}, session_id={self.session_id})>"

@@ -46,7 +46,6 @@ class AuthService:
         await self.refresh_token_repo.create({
             "session_id": session.id,
             "jti": refresh_payload["jti"],
-            "hashed_token": refresh_token,
             "expires_at": datetime.fromtimestamp(refresh_payload["exp"], tz=timezone.utc),
         })
 
@@ -82,7 +81,6 @@ class AuthService:
         await self.refresh_token_repo.create({
             "session_id": session.id,
             "jti": refresh_payload["jti"],
-            "hashed_token": refresh_token,
             "expires_at": datetime.fromtimestamp(refresh_payload["exp"], tz=timezone.utc),
         })
 
