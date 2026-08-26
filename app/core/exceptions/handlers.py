@@ -5,6 +5,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from structlog import get_logger
 
 from app.core.exceptions.base import AppException
+from app.core.exceptions.rate_limit import RateLimitExceededError
 
 logger = get_logger(__name__)
 
@@ -29,6 +30,25 @@ def register_exception_handlers(app: FastAPI) -> None:
                     "details": exc.details,
                 },
             },
+        )
+
+    @app.exception_handler(RateLimitExceededError)
+    async def rate_limit_exception_handler(request: Request, exc: RateLimitExceededError):
+        headers = {}
+        if exc.retry_after:
+            headers["Retry-After"] = str(exc.retry_after)
+            
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={
+                "success": False,
+                "error": {
+                    "code": exc.error_code,
+                    "message": exc.message,
+                    "details": exc.details,
+                },
+            },
+            headers=headers,
         )
 
     @app.exception_handler(StarletteHTTPException)
