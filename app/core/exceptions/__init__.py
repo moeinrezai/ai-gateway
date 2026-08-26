@@ -6,6 +6,7 @@ from app.core.exceptions.auth import (
 )
 from app.core.exceptions.base import AppException
 from app.core.exceptions.handlers import register_exception_handlers
+from app.core.exceptions.rate_limit import RateLimitExceededError
 
 __all__ = [
     "AppException",
@@ -13,5 +14,6 @@ __all__ = [
     "InvalidTokenError",
     "PermissionDeniedError",
     "UserAlreadyExistsError",
+    "RateLimitExceededError",
     "register_exception_handlers",
 ]
