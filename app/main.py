@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.middleware import RequestIDMiddleware
+from app.api.v1.router import router as api_v1_router
 from app.core.config import settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import setup_logging
@@ -21,7 +22,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -32,6 +32,8 @@ app.add_middleware(
 app.add_middleware(RequestIDMiddleware)
 
 register_exception_handlers(app)
+
+app.include_router(api_v1_router)
 
 
 @app.get("/health", tags=["Health"])
