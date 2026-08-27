@@ -139,10 +139,14 @@ class AuthService:
 
         # 8. Save new refresh token in DB (FIXED: No hashed_token)
         new_payload = decode_token(new_refresh_token, "refresh")
-        await self.refresh_token_repo.create({
-            "session_id": session.id,
-            "jti": new_payload["jti"],
-            "expires_at": datetime.fromtimestamp(new_payload["exp"], tz=timezone.utc),
-        })
+        await self.refresh_token_repo.create(
+            {
+                "session_id": session.id,
+                "jti": new_payload["jti"],
+                "expires_at": datetime.fromtimestamp(
+                    new_payload["exp"], tz=timezone.utc
+                ),
+            }
+        )
 
         return new_access_token, new_refresh_token

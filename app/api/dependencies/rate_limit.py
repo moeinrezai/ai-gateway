@@ -16,7 +16,12 @@ class IPRateLimiter:
         request: Request,
         redis: Redis = Depends(get_redis),
     ) -> None:
-        client_ip = request.client.host if request.client else "unknown"
+        client_ip = getattr(request.state, "client_ip", None)
+        if not client_ip and request.client:
+            client_ip = request.client.host
+        elif not client_ip:
+            client_ip = "unknown"
+
         key = f"rl:ip:{client_ip}"
 
         await check_rate_limit(redis, key, self.limit, self.window)

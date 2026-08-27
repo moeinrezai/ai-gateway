@@ -41,7 +41,7 @@ class Settings(BaseSettings):
 
     @property
     def redis_url(self) -> str:
-  
+
         pwd = self.REDIS_PASSWORD.get_secret_value() if self.REDIS_PASSWORD else ""
         auth = f":{pwd}@" if pwd else ""
         return f"redis://{auth}{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
@@ -59,7 +59,6 @@ class Settings(BaseSettings):
         default=30, description="Timeout in seconds for AI provider requests"
     )
     AI_DEFAULT_MODEL: str = Field(default="gpt-3.5-turbo")
-
 
     TRUSTED_PROXIES: str = Field(
         default="127.0.0.1",

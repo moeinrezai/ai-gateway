@@ -20,9 +20,11 @@ from app.services.user import UserService
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
-def _set_auth_cookies(response: Response, access_token: str, refresh_token: str) -> None:
+def _set_auth_cookies(
+    response: Response, access_token: str, refresh_token: str
+) -> None:
     is_secure = settings.APP_ENV == "production"
-    
+
     response.set_cookie(
         key="access_token",
         value=access_token,
@@ -32,7 +34,7 @@ def _set_auth_cookies(response: Response, access_token: str, refresh_token: str)
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         path="/",
     )
-    
+
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
@@ -40,7 +42,7 @@ def _set_auth_cookies(response: Response, access_token: str, refresh_token: str)
         secure=is_secure,
         samesite="strict",
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
-        path=f"{settings.APP_API_V1_PREFIX}",  
+        path=f"{settings.APP_API_V1_PREFIX}",
     )
 
 
@@ -50,7 +52,10 @@ def _clear_auth_cookies(response: Response) -> None:
 
 
 def _get_client_ip(request: Request) -> str:
-    return request.client.host if request.client else "unknown"
+    ip = getattr(request.state, "client_ip", None)
+    if not ip and request.client:
+        ip = request.client.host
+    return ip or "unknown"
 
 
 @router.post("/register", response_model=UserRead, status_code=201)
