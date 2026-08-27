@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class AIProviderType(str, Enum):
@@ -22,11 +22,14 @@ class ChatRequest(BaseModel):
 
 
 class ChatResponse(BaseModel):
+ 
+    model_config = ConfigDict(extra="ignore")
+    
     id: str
     provider: str
     model: str
     message: ChatMessage
-    usage: dict[str, int]
+    usage: dict[str, Any]  
     finish_reason: str
 
 
@@ -38,9 +41,12 @@ class GenerationRequest(BaseModel):
 
 
 class GenerationResponse(BaseModel):
+  
+    model_config = ConfigDict(extra="ignore")
+    
     id: str
     provider: str
     model: str
     text: str
-    usage: dict[str, int]
+    usage: dict[str, Any]  
     finish_reason: str
