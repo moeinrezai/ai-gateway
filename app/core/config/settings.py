@@ -28,7 +28,7 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
-        """Constructs the async PostgreSQL connection URL."""
+
         return (
             f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD.get_secret_value()}"
             f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
@@ -41,7 +41,7 @@ class Settings(BaseSettings):
 
     @property
     def redis_url(self) -> str:
-        """Constructs the Redis connection URL."""
+  
         pwd = self.REDIS_PASSWORD.get_secret_value() if self.REDIS_PASSWORD else ""
         auth = f":{pwd}@" if pwd else ""
         return f"redis://{auth}{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
@@ -59,6 +59,19 @@ class Settings(BaseSettings):
         default=30, description="Timeout in seconds for AI provider requests"
     )
     AI_DEFAULT_MODEL: str = Field(default="gpt-3.5-turbo")
+
+
+    TRUSTED_PROXIES: str = Field(
+        default="127.0.0.1",
+        description="Comma-separated list of trusted proxy IPs (e.g., '127.0.0.1,10.0.0.1')",
+    )
+
+    @property
+    def trusted_proxies_list(self) -> list[str]:
+
+        if not self.TRUSTED_PROXIES:
+            return []
+        return [ip.strip() for ip in self.TRUSTED_PROXIES.split(",") if ip.strip()]
 
 
 settings = Settings()
