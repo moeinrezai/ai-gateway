@@ -3,9 +3,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.middleware import RequestIDMiddleware
+from app.api.middleware import RequestIDMiddleware, TrustedProxyMiddleware
 from app.api.v1.router import router as api_v1_router
-from app.core.config import settings
+from app.core.config.settings import settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import setup_logging
 
@@ -29,6 +29,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(TrustedProxyMiddleware)
 app.add_middleware(RequestIDMiddleware)
 
 register_exception_handlers(app)
