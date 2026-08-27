@@ -52,7 +52,7 @@ async def override_get_redis():
     app.dependency_overrides[get_redis] = _get_redis
     yield
     app.dependency_overrides.clear()
-    await test_redis.close()  
+    await test_redis.aclose()
 
 
 @pytest_asyncio.fixture(scope="function")
