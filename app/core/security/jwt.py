@@ -3,8 +3,8 @@ from datetime import datetime, timedelta, timezone
 
 import jwt
 
-from app.core.config import settings
-from app.core.exceptions import InvalidTokenError
+from app.core.config.settings import settings
+from app.core.exceptions.auth import InvalidTokenError
 
 
 def _create_token(
@@ -38,13 +38,18 @@ def create_access_token(
     subject: uuid.UUID,
     session_id: uuid.UUID,
     role: str,
+    csrf_token: str | None = None,
 ) -> str:
+    extra_claims = {"role": role}
+    if csrf_token:
+        extra_claims["csrf"] = csrf_token
+    
     return _create_token(
         subject=subject,
         session_id=session_id,
         token_type="access",
         expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
-        extra_claims={"role": role},
+        extra_claims=extra_claims,
     )
 
 
@@ -68,12 +73,12 @@ def decode_token(token: str, expected_type: str) -> dict:
             algorithms=[settings.JWT_ALGORITHM],
             options={"verify_exp": True},
         )
-
+        
         if payload.get("type") != expected_type:
             raise InvalidTokenError("Invalid token type.")
-
+            
         return payload
-
+        
     except jwt.ExpiredSignatureError:
         raise InvalidTokenError("Token has expired.")
     except jwt.InvalidTokenError:

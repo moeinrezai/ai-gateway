@@ -1,13 +1,8 @@
 from fastapi import APIRouter, Depends, Request, Response
-
 from app.api.dependencies.auth import get_current_session, get_refresh_token_from_cookie
 from app.api.dependencies.rate_limit import AuthRateLimiter
-from app.api.dependencies.services import (
-    get_auth_service,
-    get_session_service,
-    get_user_service,
-)
-from app.core.config import settings
+from app.api.dependencies.services import get_auth_service, get_session_service, get_user_service
+from app.core.config.settings import settings
 from app.models.session import Session
 from app.models.user import User
 from app.schemas.auth import ChangePasswordRequest, LoginRequest, RegisterRequest
@@ -21,10 +16,13 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 def _set_auth_cookies(
-    response: Response, access_token: str, refresh_token: str
+    response: Response, 
+    access_token: str, 
+    refresh_token: str,
+    csrf_token: str,
 ) -> None:
     is_secure = settings.APP_ENV == "production"
-
+    
     response.set_cookie(
         key="access_token",
         value=access_token,
@@ -34,7 +32,7 @@ def _set_auth_cookies(
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         path="/",
     )
-
+    
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
@@ -44,11 +42,26 @@ def _set_auth_cookies(
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
         path=f"{settings.APP_API_V1_PREFIX}",
     )
+    
+
+    response.set_cookie(
+        key=settings.CSRF_COOKIE_NAME,
+        value=csrf_token,
+        httponly=False, 
+        secure=settings.CSRF_COOKIE_SECURE,
+        samesite=settings.CSRF_COOKIE_SAMESITE,
+        max_age=settings.CSRF_COOKIE_MAX_AGE,
+        path=settings.CSRF_COOKIE_PATH,
+    )
 
 
 def _clear_auth_cookies(response: Response) -> None:
     response.delete_cookie(key="access_token", path="/")
     response.delete_cookie(key="refresh_token", path=f"{settings.APP_API_V1_PREFIX}")
+    response.delete_cookie(
+        key=settings.CSRF_COOKIE_NAME,
+        path=settings.CSRF_COOKIE_PATH,
+    )
 
 
 def _get_client_ip(request: Request) -> str:
@@ -66,13 +79,13 @@ async def register(
     auth_service: AuthService = Depends(get_auth_service),
     _: None = Depends(AuthRateLimiter()),
 ):
-    user, _, access_token, refresh_token = await auth_service.register(
+    user, _, access_token, refresh_token, csrf_token = await auth_service.register(
         email=payload.email,
         password=payload.password,
         ip=_get_client_ip(request),
         user_agent=request.headers.get("user-agent"),
     )
-    _set_auth_cookies(response, access_token, refresh_token)
+    _set_auth_cookies(response, access_token, refresh_token, csrf_token)
     return user
 
 
@@ -84,13 +97,13 @@ async def login(
     auth_service: AuthService = Depends(get_auth_service),
     _: None = Depends(AuthRateLimiter()),
 ):
-    user, _, access_token, refresh_token = await auth_service.login(
+    user, _, access_token, refresh_token, csrf_token = await auth_service.login(
         email=payload.email,
         password=payload.password,
         ip=_get_client_ip(request),
         user_agent=request.headers.get("user-agent"),
     )
-    _set_auth_cookies(response, access_token, refresh_token)
+    _set_auth_cookies(response, access_token, refresh_token, csrf_token)
     return user
 
 
@@ -112,10 +125,8 @@ async def refresh(
     refresh_token_str: str = Depends(get_refresh_token_from_cookie),
     auth_service: AuthService = Depends(get_auth_service),
 ):
-    new_access_token, new_refresh_token = await auth_service.refresh_tokens(
-        refresh_token_str
-    )
-    _set_auth_cookies(response, new_access_token, new_refresh_token)
+    new_access_token, new_refresh_token, new_csrf_token = await auth_service.refresh_tokens(refresh_token_str)
+    _set_auth_cookies(response, new_access_token, new_refresh_token, new_csrf_token)
     return SuccessResponse(message="Tokens refreshed successfully.")
 
 
@@ -129,6 +140,4 @@ async def change_password(
     user, current_session = session_data
     await user_service.change_password(user, payload.old_password, payload.new_password)
     await session_service.revoke_other_sessions(user.id, current_session.id)
-    return SuccessResponse(
-        message="Password changed successfully. Other sessions have been logged out."
-    )
+    return SuccessResponse(message="Password changed successfully. Other sessions have been logged out.")
