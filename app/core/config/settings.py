@@ -64,6 +64,8 @@ class Settings(BaseSettings):
         default="127.0.0.1",
         description="Comma-separated list of trusted proxy IPs (e.g., '127.0.0.1,10.0.0.1')",
     )
+    
+    
 
     @property
     def trusted_proxies_list(self) -> list[str]:
@@ -71,6 +73,34 @@ class Settings(BaseSettings):
         if not self.TRUSTED_PROXIES:
             return []
         return [ip.strip() for ip in self.TRUSTED_PROXIES.split(",") if ip.strip()]
-
+    
+    CSRF_ENABLED: bool = Field(
+        default=True,
+        description="Enable CSRF protection for state-changing requests",
+    )
+    CSRF_HEADER_NAME: str = Field(
+        default="X-CSRF-Token",
+        description="HTTP header name for CSRF token",
+    )
+    CSRF_COOKIE_NAME: str = Field(
+        default="csrf_token",
+        description="Cookie name for CSRF token",
+    )
+    CSRF_COOKIE_SECURE: bool = Field(
+        default=True,
+        description="Set Secure flag on CSRF cookie (True in production)",
+    )
+    CSRF_COOKIE_SAMESITE: str = Field(
+        default="lax",
+        description="SameSite attribute for CSRF cookie (lax, strict, none)",
+    )
+    CSRF_COOKIE_PATH: str = Field(
+        default="/",
+        description="Path for CSRF cookie",
+    )
+    CSRF_COOKIE_MAX_AGE: int = Field(
+        default=3600,
+        description="Max age for CSRF cookie in seconds (default: 1 hour)",
+    )
 
 settings = Settings()
