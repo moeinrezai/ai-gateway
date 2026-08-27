@@ -1,7 +1,8 @@
+import uuid
 import pytest
 from httpx import AsyncClient
 
-from app.core.config import settings
+from app.core.config.settings import settings
 
 
 @pytest.mark.asyncio
@@ -24,7 +25,7 @@ async def test_register_success(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_login_success(client: AsyncClient, test_user):
-    payload = {"email": test_user.email, "password": "SecurePass123!"}
+    payload = {"email": test_user.email, "password": test_user.password}
     response = await client.post(
         f"{settings.APP_API_V1_PREFIX}/auth/login", json=payload
     )
@@ -43,17 +44,9 @@ async def test_get_profile_unauthorized(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_get_profile_authorized(client: AsyncClient, test_user):
-    login_payload = {"email": test_user.email, "password": "SecurePass123!"}
-    login_response = await client.post(
-        f"{settings.APP_API_V1_PREFIX}/auth/login", json=login_payload
-    )
-
-    cookies = login_response.cookies
-
-    response = await client.get(
-        f"{settings.APP_API_V1_PREFIX}/users/me", cookies=cookies
-    )
+async def test_get_profile_authorized(authenticated_client: AsyncClient, test_user):
+  
+    response = await authenticated_client.get(f"{settings.APP_API_V1_PREFIX}/users/me")
 
     assert response.status_code == 200
     assert response.json()["email"] == test_user.email
