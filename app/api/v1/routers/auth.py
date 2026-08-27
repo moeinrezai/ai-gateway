@@ -38,16 +38,15 @@ def _set_auth_cookies(
         value=refresh_token,
         httponly=True,
         secure=is_secure,
-        samesite="strict",
+        samesite="lax", 
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
-        path=f"{settings.APP_API_V1_PREFIX}",
+        path=f"{settings.APP_API_V1_PREFIX}", 
     )
     
-
     response.set_cookie(
         key=settings.CSRF_COOKIE_NAME,
         value=csrf_token,
-        httponly=False, 
+        httponly=False,
         secure=settings.CSRF_COOKIE_SECURE,
         samesite=settings.CSRF_COOKIE_SAMESITE,
         max_age=settings.CSRF_COOKIE_MAX_AGE,
@@ -62,7 +61,6 @@ def _clear_auth_cookies(response: Response) -> None:
         key=settings.CSRF_COOKIE_NAME,
         path=settings.CSRF_COOKIE_PATH,
     )
-
 
 def _get_client_ip(request: Request) -> str:
     ip = getattr(request.state, "client_ip", None)
