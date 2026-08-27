@@ -13,7 +13,7 @@ class UserRepository(BaseRepository[User]):
         result = await self.db.execute(select(User).where(User.email == email))
         return result.scalars().first()
 
-        async def update(self, user: User) -> User:
-            await self.db.flush()
-            await self.db.refresh(user)
-            return user
+    async def update(self, user: User) -> User:
+        await self.db.flush()
+        await self.db.refresh(user)
+        return user
