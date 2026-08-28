@@ -8,9 +8,10 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select
+
 from app.main import app
 from app.api.dependencies.db import get_db
-from app.core.redis import get_redis 
+from app.core.redis import get_redis
 from app.core.config.settings import settings
 from app.core.security.password import hash_password
 from app.models.user import User
@@ -43,7 +44,6 @@ async def override_get_db(db_session):
 
 @pytest_asyncio.fixture(scope="function")
 async def override_get_redis():
-  
     test_redis = redis.from_url(settings.redis_url, decode_responses=True)
     
     async def _get_redis():
@@ -89,7 +89,6 @@ async def test_user(db_session, user_role):
     await db_session.commit()
     await db_session.refresh(user)
     
-
     user.password = password
     return user
 
@@ -103,8 +102,38 @@ async def authenticated_client(client: AsyncClient, test_user):
     response = await client.post(f"{settings.APP_API_V1_PREFIX}/auth/login", json=login_payload)
     
     if response.status_code != 200:
-        raise RuntimeError(f"Failed to authenticate test user: {response.text}")
+        raise RuntimeError(f"Failed to authenticate test user: {response.status_code} - {response.text}")
     
- 
+    # 1. به‌روزرسانی کوکی‌های کلاینت
     client.cookies.update(response.cookies)
+    
+    # 2. عیب‌یابی: چاپ اطلاعات دریافتی برای اطمینان از ارسال کوکی توسط بک‌اند
+    print("\n=== LOGIN RESPONSE DEBUG ===")
+    print(f"Cookies received by httpx: {list(response.cookies.keys())}")
+    print(f"Raw Set-Cookie header: {response.headers.get('set-cookie')}")
+    print(f"Expected CSRF Cookie Name: {settings.CSRF_COOKIE_NAME}")
+    print("============================\n")
+    
+    # 3. تلاش برای دریافت توکن از object کوکی httpx
+    csrf_token = response.cookies.get(settings.CSRF_COOKIE_NAME)
+    
+    # 4. اگر نبود، تلاش برای استخراج دستی از هدر Set-Cookie
+    if not csrf_token:
+        import re
+        set_cookie_header = response.headers.get("set-cookie", "")
+        match = re.search(rf'{settings.CSRF_COOKIE_NAME}=([^;]+)', set_cookie_header)
+        if match:
+            csrf_token = match.group(1)
+            print(f"✅ Found CSRF token manually in Set-Cookie header: {csrf_token}")
+        else:
+            raise RuntimeError(
+                f"❌ CRITICAL: Backend did NOT set the '{settings.CSRF_COOKIE_NAME}' cookie! "
+                f"Available cookies: {list(response.cookies.keys())}. "
+                f"Please check app/api/v1/routers/auth.py to ensure _set_auth_cookies includes csrf_token."
+            )
+            
+    # 5. تنظیم هدر برای تمام درخواست‌های بعدی این کلاینت
+    client.headers[settings.CSRF_HEADER_NAME] = csrf_token
+    print(f"✅ Successfully set {settings.CSRF_HEADER_NAME} header for subsequent requests.\n")
+    
     return client

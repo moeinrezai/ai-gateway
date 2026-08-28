@@ -1,0 +1,13 @@
+services:
+  backend:
+    volumes:
+      - ../app:/app/app:cached
+      - ../tests:/app/tests:cached
+      - ../alembic:/app/alembic:cached
+      - ../scripts:/app/scripts:cached
+      - ../pyproject.toml:/app/pyproject.toml
+      - ../.env:/app/.env
+    command: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - APP_ENV=development
+      - APP_DEBUG=true
