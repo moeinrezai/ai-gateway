@@ -394,9 +394,11 @@ Response: 429 Too Many Requests
 
 ---
 
-## 📁 Project Structure
-```
+<div dir="ltr">
 
+## 📁 Project Structure
+
+```text
 ai-gateway/
 ├── app/                          # کد اصلی برنامه
 │   ├── api/                      # لایه API
@@ -499,9 +501,6 @@ ai-gateway/
 ├── uv.lock                       # uv Lock File
 ├── alembic.ini                   # Alembic Config
 └── README.md                     # This File
-```
-
----
 
 ## 🚀 دستورات راه‌اندازی
 
