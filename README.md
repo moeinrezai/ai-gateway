@@ -16,7 +16,7 @@
 
 **یک AI Gateway امن، مقیاس‌پذیر و حرفه‌ای برای مدیریت درخواست‌های هوش مصنوعی**
 
-[گزارش تست‌ها](docs/test_results/) •
+[گزارش تست‌ها](docs/test_results/project_test_result.md) •
 </div>
 
 <p align="center">
