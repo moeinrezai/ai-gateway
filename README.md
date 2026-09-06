@@ -37,6 +37,37 @@
 
 ---
 
+## 📸 تصاویر محیط تست
+
+در این بخش اسکرین‌شات‌های گرفته شده از محیط‌های تست (Postman و Swagger UI) قرار دارد.
+
+### 🧪 تست با Postman
+
+| توضیح | تصویر |
+|-------|-------|
+| ثبت‌نام کاربر جدید | ![Register](docs/screenshots/postman/Register.png) |
+| ورود کاربر | ![Login](docs/screenshots/postman/login.png) |
+| نوسازی توکن (Refresh Token) | ![Refresh Token](docs/screenshots/postman/refresh_token.png) |
+| دریافت پروفایل کاربر | ![Users Me](docs/screenshots/postman/users_me.png) |
+| دریافت پروفایل با کوکی‌ها | ![Users Me Cookies](docs/screenshots/postman/users_me_cookies.png) |
+| دریافت پروفایل با هدرها | ![Users Me Headers](docs/screenshots/postman/users_me_headers.png) |
+| لیست جلسات فعال | ![Sessions](docs/screenshots/postman/sessions.png) |
+| حذف یک جلسه | ![Delete Session](docs/screenshots/postman/delete_session_id.png) |
+| ارسال درخواست چت به AI | ![Chat Post](docs/screenshots/postman/chat_post.png) |
+
+### 📄 مستندات Swagger UI
+
+| توضیح | تصویر |
+|-------|-------|
+| صفحه ورود (Login) | ![Swagger Login](docs/screenshots/swagger_ui/login.png) |
+| دریافت پروفایل کاربر | ![Get My Profile](docs/screenshots/swagger_ui/get_my_profile.png) |
+| لیست جلسات | ![Get Sessions](docs/screenshots/swagger_ui/get_sessions.png) |
+| ارسال درخواست چت (نمایش فرم) | ![Chat API Post](docs/screenshots/swagger_ui/chat_api_post.png) |
+| نتیجه درخواست چت | ![Chat API Result](docs/screenshots/swagger_ui/chat_api_post_result.png) |
+
+---
+
+
 ## 📋 فهرست مطالب
 
 - [معرفی پروژه](#-معرفی-پروژه)
@@ -49,8 +80,7 @@
 - [مدیریت پکیج با uv](#-مدیریت-پکیج-با-uv)
 - [API Endpoints](#-api-endpoints)
 - [تست‌ها و QA](#-تست‌ها-و-qa)
-- [امنیت](#-امنیت)
-- [مستندات](#-مستندات)
+- 
 - [تصاویر محیط تست](#-تصاویر-محیط-تست)
 
 ---
@@ -699,49 +729,8 @@ docker-compose -f docker/docker-compose.yml exec backend uv run pytest --cov=app
 
 ### Threat Model
 
-📄 **[مشاهده مستندات کامل امنیت](docs/security.md)**
 
----
 
-## 📚 مستندات
-
-- 📖 [مستندات API (Swagger)](http://127.0.0.1:8000/docs)
-- 🏗️ [معماری سیستم](docs/architecture.md)
-- 🔐 [راهنمای امنیت](docs/security.md)
-- 🧪 [گزارش تست‌ها](docs/test_results/)
-- 🎥 [دمو Rate Limiting](docs/rate_limit_login_demo.mp4)
-
----
-
-## 📸 تصاویر محیط تست
-
-در این بخش اسکرین‌شات‌های گرفته شده از محیط‌های تست (Postman و Swagger UI) قرار دارد.
-
-### 🧪 تست با Postman
-
-| توضیح | تصویر |
-|-------|-------|
-| ثبت‌نام کاربر جدید | ![Register](docs/screenshots/postman/Register.png) |
-| ورود کاربر | ![Login](docs/screenshots/postman/login.png) |
-| نوسازی توکن (Refresh Token) | ![Refresh Token](docs/screenshots/postman/refresh_token.png) |
-| دریافت پروفایل کاربر | ![Users Me](docs/screenshots/postman/users_me.png) |
-| دریافت پروفایل با کوکی‌ها | ![Users Me Cookies](docs/screenshots/postman/users_me_cookies.png) |
-| دریافت پروفایل با هدرها | ![Users Me Headers](docs/screenshots/postman/users_me_headers.png) |
-| لیست جلسات فعال | ![Sessions](docs/screenshots/postman/sessions.png) |
-| حذف یک جلسه | ![Delete Session](docs/screenshots/postman/delete_session_id.png) |
-| ارسال درخواست چت به AI | ![Chat Post](docs/screenshots/postman/chat_post.png) |
-
-### 📄 مستندات Swagger UI
-
-| توضیح | تصویر |
-|-------|-------|
-| صفحه ورود (Login) | ![Swagger Login](docs/screenshots/swagger_ui/login.png) |
-| دریافت پروفایل کاربر | ![Get My Profile](docs/screenshots/swagger_ui/get_my_profile.png) |
-| لیست جلسات | ![Get Sessions](docs/screenshots/swagger_ui/get_sessions.png) |
-| ارسال درخواست چت (نمایش فرم) | ![Chat API Post](docs/screenshots/swagger_ui/chat_api_post.png) |
-| نتیجه درخواست چت | ![Chat API Result](docs/screenshots/swagger_ui/chat_api_post_result.png) |
-
----
 
 ## 🤝 مشارکت
 
