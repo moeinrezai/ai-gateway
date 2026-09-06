@@ -1,93 +1,97 @@
 <div dir="rtl">
 
-# 🚀 Enterprise AI Gateway
+🚀 Enterprise AI Gateway
 
 <div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)
 
-![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)
 
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791.svg)
 
-![Redis](https://img.shields.io/badge/Redis-7-DC382D.svg)
 
-![Docker](https://img.shields.io/badge/Docker-Compose-2496ED.svg)
 
-![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)
 
-![Security](https://img.shields.io/badge/Security-Hardened-red.svg)
 
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-**یک AI Gateway امن، مقیاس‌پذیر و حرفه‌ای برای مدیریت درخواست‌های هوش مصنوعی**
 
-[گزارش تست‌ها](docs/test_results/) • [مستندات API](http://127.0.0.1:8000/docs) • [دمو Rate Limiting](https://aparat.com/v/kbkj2a6)
+یک AI Gateway امن، مقیاس‌پذیر و حرفه‌ای برای مدیریت متمرکز، امن و قابل‌کنترل درخواست‌های هوش مصنوعی
+
+گزارش تست‌ها • مستندات API • دموی Rate Limiting
 
 </div>
 
+🎬 دمو ویدئویی
+
 <p align="center">
-  <a href="https://aparat.com/v/kbkj2a6" target="_blank">
+  <img
+    src="docs/rate_limit_login_demo.png"
+    alt="Rate Limiting Login Demo"
+    width="900"
+  />
+</p>
+
+<p align="center">
+  <a href="https://aparat.com/v/kbkj2a6" target="_blank" rel="noopener noreferrer">
     <img
-      src="https://img.shields.io/badge/Watch-Performance%20%26%20Rate%20Limit%20Demo-red?style=for-the-badge&logo=github"
-      alt="Watch Performance and Rate Limit Demo"
-    >
+      src="https://img.shields.io/badge/▶%20پخش%20ویدئوی%20تست%20Rate%20Limiting-E53935?style=for-the-badge"
+      alt="پخش ویدئوی تست Rate Limiting"
+    />
   </a>
 </p>
 
-دمو ویدئویی: برای مشاهده اجرای واقعی Rate Limiting و سناریوی Login، از لینک آپارات استفاده کنید. ویدئو خارج از مخزن نگهداری می‌شود تا حجم Repository بی‌جهت افزایش پیدا نکند.
+<p align="center">
+  <strong>اجرای واقعی Rate Limiting در سناریوی Login تحت درخواست‌های متوالی</strong>
+</p>
 
----
+<p align="center">
+  <sub>
+    برای مشاهده اجرای کامل تست، روی دکمه بالا کلیک کنید؛ ویدئو در آپارات پخش می‌شود.
+  </sub>
+</p>
 
-## 📋 فهرست مطالب
+📋 فهرست مطالب
 
-- [معرفی پروژه](#-معرفی-پروژه)
+معرفی پروژه
 
-- [نقشه معماری کامل](#-نقشه-معماری-کامل)
+نقشه معماری کامل
 
-- [ویژگی‌های کلیدی](#-ویژگی‌های-کلیدی)
+ویژگی‌های کلیدی
 
-- [سیستم احراز هویت](#-سیستم-احراز-هویت)
+سیستم احراز هویت
 
-- [مکانیزم Rate Limiting](#-مکانیزم-rate-limiting)
+مکانیزم Rate Limiting
 
-- [ساختار پروژه](#-ساختار-پروژه)
+ساختار پروژه
 
-- [دستورات راه‌اندازی](#-دستورات-راه‌اندازی)
+دستورات راه‌اندازی
 
-- [مدیریت پکیج با uv](#-مدیریت-پکیج-با-uv)
+مدیریت پکیج با uv
 
-- [API Endpoints](#-api-endpoints)
+API Endpoints
 
-- [تست‌ها و QA](#-تست‌ها-و-qa)
+تست‌ها و QA
 
-- [امنیت](#-امنیت)
+امنیت
 
-- [مستندات](#-مستندات)
+مستندات
 
----
+🎯 معرفی پروژه
 
-## 🎯 معرفی پروژه
+این پروژه یک AI Gateway حرفه‌ای است که به عنوان لایه میانی بین کلاینت و ارائه‌دهندگان سرویس‌های هوش مصنوعی (مانند OpenAI) قرار می‌گیرد. هدف اصلی این پروژه:
 
-این پروژه یک **AI Gateway** حرفه‌ای است که به عنوان لایه میانی بین کلاینت و ارائه‌دهندگان سرویس‌های هوش مصنوعی (مانند OpenAI) قرار می‌گیرد. هدف اصلی این پروژه:
+مدیریت متمرکز API Keyها: کلاینت هرگز به API Keyهای Providerها دسترسی ندارد
 
-- **مدیریت متمرکز API Keyها**: کلاینت هرگز به API Keyهای Providerها دسترسی ندارد
+امنیت سطح Enterprise: پیاده‌سازی JWT، CSRF Protection، Rate Limiting و Session Management
 
-- **امنیت سطح Enterprise**: پیاده‌سازی JWT، CSRF Protection، Rate Limiting و Session Management
+مقیاس‌پذیری: معماری ماژولار برای اضافه کردن Providerهای جدید بدون تغییر در کد
 
-- **مقیاس‌پذیری**: معماری ماژولار برای اضافه کردن Providerهای جدید بدون تغییر در کد
+Observability: Logging ساختاریافته و Request Tracking
 
-- **Observability**: Logging ساختاریافته و Request Tracking
+🗺️ نقشه معماری کامل
 
----
-
-## 🗺️ نقشه معماری کامل
-
-### نمای کلی سیستم
+نمای کلی سیستم
 
 <div dir="ltr">
 
-```mermaid
 
 graph TB
 
@@ -245,15 +249,13 @@ graph TB
 
     style Redis fill:#DC382D,stroke:#fff,stroke-width:2px,color:#fff
 
-```
 
 </div>
 
-### جریان درخواست (Request Flow)
+جریان درخواست (Request Flow)
 
 <div dir="ltr">
 
-```mermaid
 
 sequenceDiagram
 
@@ -309,71 +311,64 @@ sequenceDiagram
 
     end
 
-```
 
 </div>
 
----
+✨ ویژگی‌های کلیدی
 
-## ✨ ویژگی‌های کلیدی
+🔐 امنیت و احراز هویت
 
-### 🔐 امنیت و احراز هویت
+JWT با چرخش امن: Access Token (۱۵ دقیقه) + Refresh Token (۷ روز) با Rotation
 
-- **JWT با چرخش امن**: Access Token (۱۵ دقیقه) + Refresh Token (۷ روز) با Rotation
+CSRF Protection: الگوی Double Submit Cookie برای جلوگیری از حملات CSRF
 
-- **CSRF Protection**: الگوی Double Submit Cookie برای جلوگیری از حملات CSRF
+Secure Cookies: HttpOnly, Secure, SameSite=Lax برای تمام توکن‌ها
 
-- **Secure Cookies**: HttpOnly, Secure, SameSite=Lax برای تمام توکن‌ها
+Session Management: ردیابی User-Agent، IP Hash، و قابلیت Revoke
 
-- **Session Management**: ردیابی User-Agent، IP Hash، و قابلیت Revoke
+Rate Limiting: محدودسازی نرخ درخواست بر اساس IP و User با Redis
 
-- **Rate Limiting**: محدودسازی نرخ درخواست بر اساس IP و User با Redis
+🏗️ معماری
 
-### 🏗️ معماری
+Clean Architecture: جداسازی Router, Service, Repository
 
-- **Clean Architecture**: جداسازی Router, Service, Repository
+Provider Abstraction: لایه انتزاعی برای اضافه کردن Providerهای جدید
 
-- **Provider Abstraction**: لایه انتزاعی برای اضافه کردن Providerهای جدید
+Async First: استفاده بهینه از Async/Await در تمام لایه‌ها
 
-- **Async First**: استفاده بهینه از Async/Await در تمام لایه‌ها
+Dependency Injection: مدیریت وابستگی‌ها با FastAPI DI
 
-- **Dependency Injection**: مدیریت وابستگی‌ها با FastAPI DI
+🐳 زیرساخت
 
-### 🐳 زیرساخت
+Dockerized: محیط‌های Development, Testing, Production ایزوله
 
-- **Dockerized**: محیط‌های Development, Testing, Production ایزوله
+uv Package Manager: مدیریت سریع و مدرن وابستگی‌ها
 
-- **uv Package Manager**: مدیریت سریع و مدرن وابستگی‌ها
+Alembic Migrations: مدیریت نسخه‌بندی دیتابیس
 
-- **Alembic Migrations**: مدیریت نسخه‌بندی دیتابیس
+Hot Reload: تغییرات کد بلافاصله اعمال می‌شوند (Development)
 
-- **Hot Reload**: تغییرات کد بلافاصله اعمال می‌شوند (Development)
+🔑 سیستم احراز هویت
 
----
+انواع احراز هویت پیاده‌سازی شده
 
-## 🔑 سیستم احراز هویت
-
-### انواع احراز هویت پیاده‌سازی شده
-
-#### 1. JWT Authentication (Access Token)
+1. JWT Authentication (Access Token)
 
 <div dir="ltr">
 
-```http
 
 Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
-```
 
 </div>
 
-- **مدت اعتبار**: ۱۵ دقیقه
+مدت اعتبار: ۱۵ دقیقه
 
-- **الگوریتم**: HS256
+الگوریتم: HS256
 
-- **Claims**: sub, sid, type, jti, iat, nbf, exp, role, csrf
+Claims: sub, sid, type, jti, iat, nbf, exp, role, csrf
 
-- **ویژگی‌ها**:
+ویژگی‌ها:
 
   - Stateless (بدون نیاز به Database برای Validation)
 
@@ -381,43 +376,39 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
   - شامل CSRF Token برای محافظت
 
-#### 2. Refresh Token
+2. Refresh Token
 
 <div dir="ltr">
 
-```http
 
 Cookie: refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
-```
 
 </div>
 
-- **مدت اعتبار**: ۷ روز
+مدت اعتبار: ۷ روز
 
-- **ذخیره‌سازی**: Database (برای Revocation)
+ذخیره‌سازی: Database (برای Revocation)
 
-- **ویژگی‌ها**:
+ویژگی‌ها:
 
-  - **Rotation**: هر بار استفاده، توکن جدید صادر می‌شود
+  - Rotation: هر بار استفاده، توکن جدید صادر می‌شود
 
-  - **Replay Detection**: استفاده مجدد از توکن قدیمی = Revoke کل Session
+  - Replay Detection: استفاده مجدد از توکن قدیمی = Revoke کل Session
 
-  - **JTI**: شناسه یکتا برای هر توکن
+  - JTI: شناسه یکتا برای هر توکن
 
-#### 3. Session-Based Authentication
+3. Session-Based Authentication
 
 <div dir="ltr">
 
-```http
 
 Cookie: access_token=...; refresh_token=...; csrf_token=...
 
-```
 
 </div>
 
-- **Session Tracking**:
+Session Tracking:
 
   - User-Agent
 
@@ -429,25 +420,23 @@ Cookie: access_token=...; refresh_token=...; csrf_token=...
 
   - Is Active
 
-#### 4. CSRF Protection (Double Submit Cookie)
+4. CSRF Protection (Double Submit Cookie)
 
 <div dir="ltr">
 
-```http
 
 Cookie: csrf_token=abc123...
 
 Header: X-CSRF-Token: abc123...
 
-```
 
 </div>
 
-- **الگوریتم**: UUID v4
+الگوریتم: UUID v4
 
-- **مدت اعتبار**: ۱ ساعت
+مدت اعتبار: ۱ ساعت
 
-- **ویژگی‌ها**:
+ویژگی‌ها:
 
   - Cookie غیر HttpOnly (قابل خواندن توسط JavaScript)
 
@@ -455,11 +444,10 @@ Header: X-CSRF-Token: abc123...
 
   - مقایسه مقدار Cookie با Header
 
-### جریان کامل Login
+جریان کامل Login
 
 <div dir="ltr">
 
-```mermaid
 
 sequenceDiagram
 
@@ -499,19 +487,15 @@ sequenceDiagram
 
     API-->>C: 200 OK with User Data
 
-```
 
 </div>
 
----
+🚦 مکانیزم Rate Limiting
 
-## 🚦 مکانیزم Rate Limiting
-
-### الگوریتم: Sliding Window Log
+الگوریتم: Sliding Window Log
 
 <div dir="ltr">
 
-```mermaid
 
 graph LR
 
@@ -529,11 +513,10 @@ graph LR
 
     G --> H[Return Response]
 
-```
 
 </div>
 
-### محدودیت‌های تعریف شده
+محدودیت‌های تعریف شده
 
 <div dir="ltr">
 
@@ -541,25 +524,24 @@ graph LR
 
 |----------|-------|--------|-------|
 
-| `/api/v1/auth/login` | 5 | ۱ دقیقه | IP |
+| /api/v1/auth/login | 5 | ۱ دقیقه | IP |
 
-| `/api/v1/auth/register` | 3 | ۱ دقیقه | IP |
+| /api/v1/auth/register | 3 | ۱ دقیقه | IP |
 
-| `/api/v1/ai/chat` | 20 | ۱ دقیقه | IP + User |
+| /api/v1/ai/chat | 20 | ۱ دقیقه | IP + User |
 
-| `/api/v1/ai/generate` | 10 | ۱ دقیقه | IP + User |
+| /api/v1/ai/generate | 10 | ۱ دقیقه | IP + User |
 
 | سایر Endpoints | 100 | ۱ دقیقه | IP |
 
 </div>
 
-### مثال عملی: Rate Limit در Login
+مثال عملی: Rate Limit در Login
 
-**سناریو**: کاربر سعی می‌کند ۶ بار در ۱ دقیقه لاگین کند
+سناریو: کاربر سعی می‌کند ۶ بار در ۱ دقیقه لاگین کند
 
 <div dir="ltr">
 
-```bash
 
 # درخواست 1-5: موفق
 
@@ -597,19 +579,15 @@ Response: 429 Too Many Requests
 
 }
 
-```
 
 </div>
 
-📺 ***[مشاهده ویدئوی دمو: Rate Limiting در عمل](https://aparat.com/v/kbkj2a6**)\*\
+📺 **مشاهده ویدئوی دمو: Rate Limiting در عمل
 
----
-
-## 📁 ساختار پروژه
+📁 ساختار پروژه
 
 <div dir="ltr">
 
-```
 
 ai-gateway/
 
@@ -809,41 +787,35 @@ ai-gateway/
 
 └── README.md                     # This File
 
-```
 
 </div>
 
----
+🚀 دستورات راه‌اندازی
 
-## 🚀 دستورات راه‌اندازی
+پیش‌نیازها
 
-### پیش‌نیازها
+Docker Desktop (ویندوز)
 
-- Docker Desktop (ویندوز)
+uv (مدیریت پکیج پایتون)
 
-- uv (مدیریت پکیج پایتون)
+PowerShell
 
-- PowerShell
-
-### ۱. کلون کردن پروژه
+۱. کلون کردن پروژه
 
 <div dir="ltr">
 
-```powershell
 
-git clone https://github.com/yourusername/ai-gateway.git
+git clone https://github.com/moeinrezai/ai-gateway.git
 
 cd ai-gateway
 
-```
 
 </div>
 
-### ۲. نصب وابستگی‌ها با uv
+۲. نصب وابستگی‌ها با uv
 
 <div dir="ltr">
 
-```powershell
 
 # نصب uv (اگر نصب نیست)
 
@@ -853,15 +825,13 @@ pip install uv
 
 uv sync
 
-```
 
 </div>
 
-### ۳. تنظیم Environment Variables
+۳. تنظیم Environment Variables
 
 <div dir="ltr">
 
-```powershell
 
 # کپی فایل نمونه
 
@@ -871,15 +841,13 @@ Copy-Item .env.example .env
 
 notepad .env
 
-```
 
 </div>
 
-**مقادیر ضروری در `.env`:**
+مقادیر ضروری در .env:
 
 <div dir="ltr">
 
-```env
 
 # Database
 
@@ -911,15 +879,13 @@ CSRF_COOKIE_SECURE=false  # در Development
 
 OPENAI_API_KEY=sk-your-openai-api-key
 
-```
 
 </div>
 
-### ۴. راه‌اندازی با Docker Compose
+۴. راه‌اندازی با Docker Compose
 
 <div dir="ltr">
 
-```powershell
 
 # Build و اجرای سرویس‌ها
 
@@ -929,15 +895,13 @@ docker-compose -f docker/docker-compose.yml up -d --build
 
 docker-compose -f docker/docker-compose.yml ps
 
-```
 
 </div>
 
-### ۵. اعمال Migrationهای دیتابیس
+۵. اعمال Migrationهای دیتابیس
 
 <div dir="ltr">
 
-```powershell
 
 # ساخت جداول
 
@@ -947,23 +911,21 @@ docker-compose -f docker/docker-compose.yml exec backend uv run alembic upgrade 
 
 docker-compose -f docker/docker-compose.yml exec backend uv run python scripts/seed_roles.py
 
-```
 
 </div>
 
-### ۶. دسترسی به سرویس‌ها
+۶. دسترسی به سرویس‌ها
 
-- **API**: http://127.0.0.1:8000
+API: http://127.0.0.1:8000
 
-- **Swagger UI**: http://127.0.0.1:8000/docs
+Swagger UI: http://127.0.0.1:8000/docs
 
-- **ReDoc**: http://127.0.0.1:8000/redoc
+ReDoc: http://127.0.0.1:8000/redoc
 
-### دستورات پرکاربرد
+دستورات پرکاربرد
 
 <div dir="ltr">
 
-```powershell
 
 # مشاهده لاگ‌ها
 
@@ -989,29 +951,25 @@ docker-compose -f docker/docker-compose.yml down
 
 docker-compose -f docker/docker-compose.yml down -v
 
-```
 
 </div>
 
----
+📦 مدیریت پکیج با uv
 
-## 📦 مدیریت پکیج با uv
+چرا uv؟
 
-### چرا uv؟
+سرعت: ۱۰-۱۰۰x سریع‌تر از pip
 
-- **سرعت**: ۱۰-۱۰۰x سریع‌تر از pip
+قابلیت اطمینان: Lock File برای Reproducible Builds
 
-- **قابلیت اطمینان**: Lock File برای Reproducible Builds
+مدرن: پشتیبانی از Pyproject.toml
 
-- **مدرن**: پشتیبانی از Pyproject.toml
+سازگاری: کاملاً compatible با PyPI
 
-- **سازگاری**: کاملاً compatible با PyPI
-
-### دستورات uv
+دستورات uv
 
 <div dir="ltr">
 
-```powershell
 
 # همگام‌سازی وابستگی‌ها از pyproject.toml
 
@@ -1041,21 +999,18 @@ uv run pytest -v
 
 uv run alembic upgrade head
 
-```
 
 </div>
 
-### فایل‌های مرتبط
+فایل‌های مرتبط
 
-- `pyproject.toml`: تعریف وابستگی‌ها و تنظیمات پروژه
+pyproject.toml: تعریف وابستگی‌ها و تنظیمات پروژه
 
-- `uv.lock`: Lock File برای نسخه‌های دقیق پکیج‌ها
+uv.lock: Lock File برای نسخه‌های دقیق پکیج‌ها
 
----
+📡 API Endpoints
 
-## 📡 API Endpoints
-
-### Authentication
+Authentication
 
 <div dir="ltr">
 
@@ -1063,19 +1018,19 @@ uv run alembic upgrade head
 
 |--------|----------|-------------|---------------|---------------|
 
-| POST | `/api/v1/auth/register` | ثبت‌نام کاربر جدید | ❌ | ❌ |
+| POST | /api/v1/auth/register | ثبت‌نام کاربر جدید | ❌ | ❌ |
 
-| POST | `/api/v1/auth/login` | ورود کاربر | ❌ | ❌ |
+| POST | /api/v1/auth/login | ورود کاربر | ❌ | ❌ |
 
-| POST | `/api/v1/auth/logout` | خروج از حساب | ✅ | ✅ |
+| POST | /api/v1/auth/logout | خروج از حساب | ✅ | ✅ |
 
-| POST | `/api/v1/auth/refresh` | نوسازی توکن‌ها | ✅ (Refresh Token) | ✅ |
+| POST | /api/v1/auth/refresh | نوسازی توکن‌ها | ✅ (Refresh Token) | ✅ |
 
-| POST | `/api/v1/auth/change-password` | تغییر رمز عبور | ✅ | ✅ |
+| POST | /api/v1/auth/change-password | تغییر رمز عبور | ✅ | ✅ |
 
 </div>
 
-### Users
+Users
 
 <div dir="ltr">
 
@@ -1083,13 +1038,13 @@ uv run alembic upgrade head
 
 |--------|----------|-------------|---------------|---------------|
 
-| GET | `/api/v1/users/me` | دریافت پروفایل کاربر فعلی | ✅ | ❌ |
+| GET | /api/v1/users/me | دریافت پروفایل کاربر فعلی | ✅ | ❌ |
 
-| GET | `/api/v1/users/admin-only` | تست دسترسی Admin | ✅ (Admin) | ❌ |
+| GET | /api/v1/users/admin-only | تست دسترسی Admin | ✅ (Admin) | ❌ |
 
 </div>
 
-### Sessions
+Sessions
 
 <div dir="ltr">
 
@@ -1097,15 +1052,15 @@ uv run alembic upgrade head
 
 |--------|----------|-------------|---------------|---------------|
 
-| GET | `/api/v1/sessions/` | لیست Sessionهای فعال | ✅ | ❌ |
+| GET | /api/v1/sessions/ | لیست Sessionهای فعال | ✅ | ❌ |
 
-| DELETE | `/api/v1/sessions/{id}` | لغو یک Session خاص | ✅ | ✅ |
+| DELETE | /api/v1/sessions/{id} | لغو یک Session خاص | ✅ | ✅ |
 
-| DELETE | `/api/v1/sessions/` | لغو تمام Sessionها | ✅ | ✅ |
+| DELETE | /api/v1/sessions/ | لغو تمام Sessionها | ✅ | ✅ |
 
 </div>
 
-### AI
+AI
 
 <div dir="ltr">
 
@@ -1113,13 +1068,13 @@ uv run alembic upgrade head
 
 |--------|----------|-------------|---------------|---------------|
 
-| POST | `/api/v1/ai/chat` | چت با AI | ✅ | ✅ |
+| POST | /api/v1/ai/chat | چت با AI | ✅ | ✅ |
 
-| POST | `/api/v1/ai/generate` | تولید متن با AI | ✅ | ✅ |
+| POST | /api/v1/ai/generate | تولید متن با AI | ✅ | ✅ |
 
 </div>
 
-### Health
+Health
 
 <div dir="ltr">
 
@@ -1127,19 +1082,16 @@ uv run alembic upgrade head
 
 |--------|----------|-------------|---------------|
 
-| GET | `/health` | بررسی سلامت سرویس | ❌ |
+| GET | /health | بررسی سلامت سرویس | ❌ |
 
 </div>
 
----
+🧪 تست‌ها و QA
 
-## 🧪 تست‌ها و QA
-
-### اجرای تست‌ها
+اجرای تست‌ها
 
 <div dir="ltr">
 
-```powershell
 
 # اجرای تمام تست‌ها
 
@@ -1153,77 +1105,76 @@ docker-compose -f docker/docker-compose.yml exec backend uv run pytest tests/tes
 
 docker-compose -f docker/docker-compose.yml exec backend uv run pytest --cov=app -v
 
-```
 
 </div>
 
-### گزارش تست‌ها
+گزارش تست‌ها
 
-📊 **[مشاهده گزارش کامل تست‌های پاس شده](docs/test_results/)**
+📊 مشاهده گزارش کامل تست‌های پاس شده
 
-- ✅ `test_auth.py`: ۴ تست پاس شده
+✅ test_auth.py: ۴ تست پاس شده
 
-- ✅ `test_session.py`: ۳ تست پاس شده
+✅ test_session.py: ۳ تست پاس شده
 
-- ✅ `test_ai.py`: ۳ تست پاس شده
+✅ test_ai.py: ۳ تست پاس شده
 
-### انواع تست‌ها
+انواع تست‌ها
 
-۱. **Unit Tests**: تست توابع مستقل
+۱. Unit Tests: تست توابع مستقل
 
-۲. **Integration Tests**: تست یکپارچگی لایه‌ها
+۲. Integration Tests: تست یکپارچگی لایه‌ها
 
-۳. **Security Tests**: تست مکانیزم‌های امنیتی
+۳. Security Tests: تست مکانیزم‌های امنیتی
 
-۴. **API Tests**: تست Endpointها
+۴. API Tests: تست Endpointها
 
----
+🔒 امنیت
 
-## 🔒 امنیت
+ویژگی‌های امنیتی پیاده‌سازی شده
 
-### ویژگی‌های امنیتی پیاده‌سازی شده
+✅ JWT Authentication: با Access/Refresh Token
 
-- ✅ **JWT Authentication**: با Access/Refresh Token
+✅ CSRF Protection: Double Submit Cookie Pattern
 
-- ✅ **CSRF Protection**: Double Submit Cookie Pattern
+✅ Secure Cookies: HttpOnly, Secure, SameSite
 
-- ✅ **Secure Cookies**: HttpOnly, Secure, SameSite
+✅ Rate Limiting: IP-based و User-based
 
-- ✅ **Rate Limiting**: IP-based و User-based
+✅ Session Management: ردیابی و Revoke
 
-- ✅ **Session Management**: ردیابی و Revoke
+✅ Password Hashing: Argon2id
 
-- ✅ **Password Hashing**: Argon2id
+✅ Input Validation: Pydantic Schemas
 
-- ✅ **Input Validation**: Pydantic Schemas
+✅ SQL Injection Protection: SQLAlchemy ORM
 
-- ✅ **SQL Injection Protection**: SQLAlchemy ORM
+✅ XSS Protection: HttpOnly Cookies
 
-- ✅ **XSS Protection**: HttpOnly Cookies
+✅ Request ID Tracking: برای Observability
 
-- ✅ **Request ID Tracking**: برای Observability
+Threat Model
 
-### Threat Model
+📄 مشاهده مستندات کامل امنیت
 
-📄 **[مشاهده مستندات کامل امنیت](docs/security.md)**
+📚 مستندات
 
----
+📖 مستندات API (Swagger)
 
-## 📚 مستندات
+🏗️ معماری سیستم
 
-- 📖 [مستندات API (Swagger)](http://127.0.0.1:8000/docs)
+🔐 راهنمای امنیت
 
-- 🏗️ [معماری سیستم](docs/architecture.md)
+🧪 گزارش تست‌ها
 
-- 🔐 [راهنمای امنیت](docs/security.md)
+🎥 دموی Rate Limiting
 
-- 🧪 [گزارش تست‌ها](docs/test_results/)
+📌 وضعیت پروژه
 
-- 🎥 [دمو Rate Limiting](https://aparat.com/v/kbkj2a6)
+این مخزن یک نمونه عملی از طراحی یک AI Gateway با تمرکز بر امنیت، کنترل دسترسی، مدیریت Session، Rate Limiting، جداسازی لایه‌ها و قابلیت اتصال به Providerهای هوش مصنوعی است.
 
----
+Demo: برای مشاهده سناریوی عملی Rate Limiting، به بخش دموی Rate Limiting مراجعه کنید.
 
-## 🤝 مشارکت
+🤝 مشارکت
 
 ما از مشارکت جامعه متن‌باز استقبال می‌کنیم! لطفاً قبل از ارسال Pull Request:
 
@@ -1235,13 +1186,9 @@ docker-compose -f docker/docker-compose.yml exec backend uv run pytest --cov=app
 
 ۴. Documentation را به‌روزرسانی کنید
 
----
+📄 مجوز
 
-## 📄 مجوز
-
-این پروژه تحت مجوز [MIT License](LICENSE) منتشر شده است.
-
----
+این پروژه تحت مجوز MIT License منتشر شده است.
 
 <div align="center">
 
