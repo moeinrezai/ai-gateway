@@ -33,7 +33,6 @@
   <a href="https://aparat.com/v/kbkj2a6" target="_blank" rel="noopener noreferrer">
     <img
       src="https://img.shields.io/badge/▶%20پخش%20ویدئوی%20تست%20Rate%20Limiting-E53935?style=for-the-badge"
-      alt="پخش ویدئوی تست Rate Limiting"
     />
   </a>
 </p>
