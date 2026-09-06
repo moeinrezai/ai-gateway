@@ -368,7 +368,7 @@ graph LR
 
 **سناریو**: کاربر سعی می‌کند 6 بار در 1 دقیقه لاگین کند
 <div dir="ltr">
-```text
+```powershell
 # درخواست 1-5: موفق
 POST /api/v1/auth/login
 Response: 200 OK
