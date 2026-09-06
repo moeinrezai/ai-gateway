@@ -32,7 +32,7 @@
 <p align="center">
   <a href="https://aparat.com/v/kbkj2a6" target="_blank" rel="noopener noreferrer">
     <img
-      src="https://img.shields.io/badge/▶-E53935?style=for-the-badge"
+      src="https://img.shields.io/badge/▶ Play-E53935?style=for-the-badge"
     />
   </a>
 </p>
