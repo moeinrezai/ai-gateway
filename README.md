@@ -23,7 +23,7 @@
 
 <p align="center">
   <img
-    src="docs/rate_limit_login_demo.png"
+    src="docs/swagger_ui/AI Gateway - Swagger UI - Google Chrome 9_6_2026 10_33_26 PM.png"
     alt="Rate Limiting Login Demo"
     width="900"
   />
