@@ -16,7 +16,7 @@
 
 **یک AI Gateway امن، مقیاس‌پذیر و حرفه‌ای برای مدیریت درخواست‌های هوش مصنوعی**
 
-[گزارش تست‌ها](docs/test_results/) • [مستندات API](http://127.0.0.1:8000/docs) • 
+[گزارش تست‌ها](docs/test_results/) •
 </div>
 
 <p align="center">
