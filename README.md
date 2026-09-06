@@ -19,6 +19,12 @@
 
 </div>
 
+<p align="center">
+  <a href="https://github.com/moeinrezai/ai-gateway/releases/download/v1.0.0/rate_limit_login_demo.mp4">
+    <img src="https://img.shields.io/badge/Watch-Performance%20Demo-blue?style=for-the-badge&logo=github" alt="Watch Performance Demo">
+  </a>
+</p>
+
 ---
 
 ## 📋 فهرست مطالب
