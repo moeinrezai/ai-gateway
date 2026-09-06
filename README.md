@@ -27,13 +27,12 @@
 </div>
 
 <p align="center">
-
-  <a href="https://aparat.com/v/kbkj2a6">
-
-    <img src="https://img.shields.io/badge/Watch-Performance%20%26%20Rate%20Limit%20Demo-red?style=for-the-badge&logo=github" alt="Watch Performance and Rate Limit Demo">
-
-  </a>
-
+  <a href="https://aparat.com/v/kbkj2a6" target="_blank">
+    <img
+      src="https://img.shields.io/badge/Watch-Performance%20%26%20Rate%20Limit%20Demo-red?style=for-the-badge&logo=github"
+      alt="Watch Performance and Rate Limit Demo"
+    >
+  </a>
 </p>
 
 دمو ویدئویی: برای مشاهده اجرای واقعی Rate Limiting و سناریوی Login، از لینک آپارات استفاده کنید. ویدئو خارج از مخزن نگهداری می‌شود تا حجم Repository بی‌جهت افزایش پیدا نکند.
