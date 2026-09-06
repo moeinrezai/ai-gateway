@@ -1,3 +1,4 @@
+<div dir="rtl">
 
 # 🚀 Enterprise AI Gateway
 
@@ -51,6 +52,8 @@
 ## 🗺️ نقشه معماری کامل
 
 ### نمای کلی سیستم
+
+<div dir="ltr">
 
 ```mermaid
 graph TB
@@ -150,7 +153,11 @@ graph TB
     style Redis fill:#DC382D,stroke:#fff,stroke-width:2px,color:#fff
 ```
 
+</div>
+
 ### جریان درخواست (Request Flow)
+
+<div dir="ltr">
 
 ```mermaid
 sequenceDiagram
@@ -185,12 +192,14 @@ sequenceDiagram
     end
 ```
 
+</div>
+
 ---
 
 ## ✨ ویژگی‌های کلیدی
 
 ### 🔐 امنیت و احراز هویت
-- **JWT با چرخش امن**: Access Token (15 دقیقه) + Refresh Token (7 روز) با Rotation
+- **JWT با چرخش امن**: Access Token (۱۵ دقیقه) + Refresh Token (۷ روز) با Rotation
 - **CSRF Protection**: الگوی Double Submit Cookie برای جلوگیری از حملات CSRF
 - **Secure Cookies**: HttpOnly, Secure, SameSite=Lax برای تمام توکن‌ها
 - **Session Management**: ردیابی User-Agent، IP Hash، و قابلیت Revoke
@@ -215,10 +224,14 @@ sequenceDiagram
 ### انواع احراز هویت پیاده‌سازی شده
 
 #### 1. JWT Authentication (Access Token)
+<div dir="ltr">
+
 ```http
 Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
-- **مدت اعتبار**: 15 دقیقه
+
+</div>
+- **مدت اعتبار**: ۱۵ دقیقه
 - **الگوریتم**: HS256
 - **Claims**: sub, sid, type, jti, iat, nbf, exp, role, csrf
 - **ویژگی‌ها**:
@@ -227,10 +240,14 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
   - شامل CSRF Token برای محافظت
 
 #### 2. Refresh Token
+<div dir="ltr">
+
 ```http
 Cookie: refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
-- **مدت اعتبار**: 7 روز
+
+</div>
+- **مدت اعتبار**: ۷ روز
 - **ذخیره‌سازی**: Database (برای Revocation)
 - **ویژگی‌ها**:
   - **Rotation**: هر بار استفاده، توکن جدید صادر می‌شود
@@ -238,9 +255,13 @@ Cookie: refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
   - **JTI**: شناسه یکتا برای هر توکن
 
 #### 3. Session-Based Authentication
+<div dir="ltr">
+
 ```http
 Cookie: access_token=...; refresh_token=...; csrf_token=...
 ```
+
+</div>
 - **Session Tracking**:
   - User-Agent
   - IP Hash (SHA-256)
@@ -249,18 +270,24 @@ Cookie: access_token=...; refresh_token=...; csrf_token=...
   - Is Active
 
 #### 4. CSRF Protection (Double Submit Cookie)
+<div dir="ltr">
+
 ```http
 Cookie: csrf_token=abc123...
 Header: X-CSRF-Token: abc123...
 ```
+
+</div>
 - **الگوریتم**: UUID v4
-- **مدت اعتبار**: 1 ساعت
+- **مدت اعتبار**: ۱ ساعت
 - **ویژگی‌ها**:
   - Cookie غیر HttpOnly (قابل خواندن توسط JavaScript)
   - Header در تمام درخواست‌های State-Changing (POST, PUT, DELETE)
   - مقایسه مقدار Cookie با Header
 
 ### جریان کامل Login
+
+<div dir="ltr">
 
 ```mermaid
 sequenceDiagram
@@ -290,11 +317,15 @@ sequenceDiagram
     API-->>C: 200 OK with User Data
 ```
 
+</div>
+
 ---
 
 ## 🚦 مکانیزم Rate Limiting
 
 ### الگوریتم: Sliding Window Log
+
+<div dir="ltr">
 
 ```mermaid
 graph LR
@@ -307,20 +338,28 @@ graph LR
     G --> H[Return Response]
 ```
 
+</div>
+
 ### محدودیت‌های تعریف شده
+
+<div dir="ltr">
 
 | Endpoint | Limit | Window | Scope |
 |----------|-------|--------|-------|
-| `/api/v1/auth/login` | 5 | 1 دقیقه | IP |
-| `/api/v1/auth/register` | 3 | 1 دقیقه | IP |
-| `/api/v1/ai/chat` | 20 | 1 دقیقه | IP + User |
-| `/api/v1/ai/generate` | 10 | 1 دقیقه | IP + User |
-| سایر Endpoints | 100 | 1 دقیقه | IP |
+| `/api/v1/auth/login` | 5 | ۱ دقیقه | IP |
+| `/api/v1/auth/register` | 3 | ۱ دقیقه | IP |
+| `/api/v1/ai/chat` | 20 | ۱ دقیقه | IP + User |
+| `/api/v1/ai/generate` | 10 | ۱ دقیقه | IP + User |
+| سایر Endpoints | 100 | ۱ دقیقه | IP |
+
+</div>
 
 ### مثال عملی: Rate Limit در Login
 
-**سناریو**: کاربر سعی می‌کند 6 بار در 1 دقیقه لاگین کند
-<div align="ltr">
+**سناریو**: کاربر سعی می‌کند ۶ بار در ۱ دقیقه لاگین کند
+
+<div dir="ltr">
+
 ```bash
 # درخواست 1-5: موفق
 POST /api/v1/auth/login
@@ -341,9 +380,8 @@ Response: 429 Too Many Requests
     }
   }
 }
-
-
 ```
+
 </div>
 
 📺 **[مشاهده ویدئوی دمو: Rate Limiting در عمل](docs/rate_limit_login_demo.mp4)**
@@ -351,6 +389,8 @@ Response: 429 Too Many Requests
 ---
 
 ## 📁 ساختار پروژه
+
+<div dir="ltr">
 
 ```
 ai-gateway/
@@ -455,6 +495,8 @@ ai-gateway/
 └── README.md                     # This File
 ```
 
+</div>
+
 ---
 
 ## 🚀 دستورات راه‌اندازی
@@ -464,13 +506,19 @@ ai-gateway/
 - uv (مدیریت پکیج پایتون)
 - PowerShell
 
-### 1. کلون کردن پروژه
+### ۱. کلون کردن پروژه
+<div dir="ltr">
+
 ```powershell
 git clone https://github.com/yourusername/ai-gateway.git
 cd ai-gateway
 ```
 
-### 2. نصب وابستگی‌ها با uv
+</div>
+
+### ۲. نصب وابستگی‌ها با uv
+<div dir="ltr">
+
 ```powershell
 # نصب uv (اگر نصب نیست)
 pip install uv
@@ -479,7 +527,11 @@ pip install uv
 uv sync
 ```
 
-### 3. تنظیم Environment Variables
+</div>
+
+### ۳. تنظیم Environment Variables
+<div dir="ltr">
+
 ```powershell
 # کپی فایل نمونه
 Copy-Item .env.example .env
@@ -488,7 +540,12 @@ Copy-Item .env.example .env
 notepad .env
 ```
 
+</div>
+
 **مقادیر ضروری در `.env`:**
+
+<div dir="ltr">
+
 ```env
 # Database
 DB_HOST=localhost
@@ -510,7 +567,11 @@ CSRF_COOKIE_SECURE=false  # در Development
 OPENAI_API_KEY=sk-your-openai-api-key
 ```
 
-### 4. راه‌اندازی با Docker Compose
+</div>
+
+### ۴. راه‌اندازی با Docker Compose
+<div dir="ltr">
+
 ```powershell
 # Build و اجرای سرویس‌ها
 docker-compose -f docker/docker-compose.yml up -d --build
@@ -519,7 +580,11 @@ docker-compose -f docker/docker-compose.yml up -d --build
 docker-compose -f docker/docker-compose.yml ps
 ```
 
-### 5. اعمال Migrationهای دیتابیس
+</div>
+
+### ۵. اعمال Migrationهای دیتابیس
+<div dir="ltr">
+
 ```powershell
 # ساخت جداول
 docker-compose -f docker/docker-compose.yml exec backend uv run alembic upgrade head
@@ -528,12 +593,16 @@ docker-compose -f docker/docker-compose.yml exec backend uv run alembic upgrade 
 docker-compose -f docker/docker-compose.yml exec backend uv run python scripts/seed_roles.py
 ```
 
-### 6. دسترسی به سرویس‌ها
+</div>
+
+### ۶. دسترسی به سرویس‌ها
 - **API**: http://127.0.0.1:8000
 - **Swagger UI**: http://127.0.0.1:8000/docs
 - **ReDoc**: http://127.0.0.1:8000/redoc
 
 ### دستورات پرکاربرد
+
+<div dir="ltr">
 
 ```powershell
 # مشاهده لاگ‌ها
@@ -555,17 +624,21 @@ docker-compose -f docker/docker-compose.yml down
 docker-compose -f docker/docker-compose.yml down -v
 ```
 
+</div>
+
 ---
 
 ## 📦 مدیریت پکیج با uv
 
 ### چرا uv؟
-- **سرعت**: 10-100x سریع‌تر از pip
+- **سرعت**: ۱۰-۱۰۰x سریع‌تر از pip
 - **قابلیت اطمینان**: Lock File برای Reproducible Builds
 - **مدرن**: پشتیبانی از Pyproject.toml
 - **سازگاری**: کاملاً compatible با PyPI
 
 ### دستورات uv
+
+<div dir="ltr">
 
 ```powershell
 # همگام‌سازی وابستگی‌ها از pyproject.toml
@@ -590,6 +663,8 @@ uv run pytest -v
 uv run alembic upgrade head
 ```
 
+</div>
+
 ### فایل‌های مرتبط
 - `pyproject.toml`: تعریف وابستگی‌ها و تنظیمات پروژه
 - `uv.lock`: Lock File برای نسخه‌های دقیق پکیج‌ها
@@ -599,6 +674,8 @@ uv run alembic upgrade head
 ## 📡 API Endpoints
 
 ### Authentication
+<div dir="ltr">
+
 | Method | Endpoint | Description | Auth Required | CSRF Required |
 |--------|----------|-------------|---------------|---------------|
 | POST | `/api/v1/auth/register` | ثبت‌نام کاربر جدید | ❌ | ❌ |
@@ -607,35 +684,55 @@ uv run alembic upgrade head
 | POST | `/api/v1/auth/refresh` | نوسازی توکن‌ها | ✅ (Refresh Token) | ✅ |
 | POST | `/api/v1/auth/change-password` | تغییر رمز عبور | ✅ | ✅ |
 
+</div>
+
 ### Users
+<div dir="ltr">
+
 | Method | Endpoint | Description | Auth Required | CSRF Required |
 |--------|----------|-------------|---------------|---------------|
 | GET | `/api/v1/users/me` | دریافت پروفایل کاربر فعلی | ✅ | ❌ |
 | GET | `/api/v1/users/admin-only` | تست دسترسی Admin | ✅ (Admin) | ❌ |
 
+</div>
+
 ### Sessions
+<div dir="ltr">
+
 | Method | Endpoint | Description | Auth Required | CSRF Required |
 |--------|----------|-------------|---------------|---------------|
 | GET | `/api/v1/sessions/` | لیست Sessionهای فعال | ✅ | ❌ |
 | DELETE | `/api/v1/sessions/{id}` | لغو یک Session خاص | ✅ | ✅ |
 | DELETE | `/api/v1/sessions/` | لغو تمام Sessionها | ✅ | ✅ |
 
+</div>
+
 ### AI
+<div dir="ltr">
+
 | Method | Endpoint | Description | Auth Required | CSRF Required |
 |--------|----------|-------------|---------------|---------------|
 | POST | `/api/v1/ai/chat` | چت با AI | ✅ | ✅ |
 | POST | `/api/v1/ai/generate` | تولید متن با AI | ✅ | ✅ |
 
+</div>
+
 ### Health
+<div dir="ltr">
+
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
 | GET | `/health` | بررسی سلامت سرویس | ❌ |
+
+</div>
 
 ---
 
 ## 🧪 تست‌ها و QA
 
 ### اجرای تست‌ها
+
+<div dir="ltr">
 
 ```powershell
 # اجرای تمام تست‌ها
@@ -648,20 +745,22 @@ docker-compose -f docker/docker-compose.yml exec backend uv run pytest tests/tes
 docker-compose -f docker/docker-compose.yml exec backend uv run pytest --cov=app -v
 ```
 
+</div>
+
 ### گزارش تست‌ها
 
 📊 **[مشاهده گزارش کامل تست‌های پاس شده](docs/test_results/)**
 
-- ✅ `test_auth.py`: 4 تست پاس شده
-- ✅ `test_session.py`: 3 تست پاس شده
-- ✅ `test_ai.py`: 3 تست پاس شده
+- ✅ `test_auth.py`: ۴ تست پاس شده
+- ✅ `test_session.py`: ۳ تست پاس شده
+- ✅ `test_ai.py`: ۳ تست پاس شده
 
 ### انواع تست‌ها
 
-1. **Unit Tests**: تست توابع مستقل
-2. **Integration Tests**: تست یکپارچگی لایه‌ها
-3. **Security Tests**: تست مکانیزم‌های امنیتی
-4. **API Tests**: تست Endpointها
+۱. **Unit Tests**: تست توابع مستقل
+۲. **Integration Tests**: تست یکپارچگی لایه‌ها
+۳. **Security Tests**: تست مکانیزم‌های امنیتی
+۴. **API Tests**: تست Endpointها
 
 ---
 
@@ -700,10 +799,10 @@ docker-compose -f docker/docker-compose.yml exec backend uv run pytest --cov=app
 
 ما از مشارکت جامعه متن‌باز استقبال می‌کنیم! لطفاً قبل از ارسال Pull Request:
 
-1. یک Issue باز کنید
-2. از Conventional Commits استفاده کنید
-3. تست‌ها را اجرا کنید
-4. Documentation را به‌روزرسانی کنید
+۱. یک Issue باز کنید
+۲. از Conventional Commits استفاده کنید
+۳. تست‌ها را اجرا کنید
+۴. Documentation را به‌روزرسانی کنید
 
 ---
 
@@ -714,5 +813,7 @@ docker-compose -f docker/docker-compose.yml exec backend uv run pytest --cov=app
 ---
 
 <div align="center">
+
+</div>
 
 </div>
