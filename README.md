@@ -80,8 +80,7 @@
 - [مدیریت پکیج با uv](#-مدیریت-پکیج-با-uv)
 - [API Endpoints](#-api-endpoints)
 - [تست‌ها و QA](#-تست‌ها-و-qa)
-- 
-- [تصاویر محیط تست](#-تصاویر-محیط-تست)
+
 
 ---
 
@@ -395,7 +394,7 @@ Response: 429 Too Many Requests
 
 ---
 
-## 📁 ساختار پروژه
+## 📁 Project Structure
 
 ```
 ai-gateway/
