@@ -1,4 +1,5 @@
 
+<div dir="rtl">
 
 # 🚀 Enterprise AI Gateway
 
@@ -20,8 +21,8 @@
 
 <p align="center">
   <img
-    src="docs/screenshots/swagger_ui/AI Gateway - Swagger UI - Google Chrome 9_6_2026 10_33_26 PM.png"
-    alt="Rate Limiting Login Demo"
+    src="docs/screenshots/swagger_ui/login.png"
+    alt="Swagger UI Login"
     width="900"
   />
 </p>
@@ -50,6 +51,7 @@
 - [تست‌ها و QA](#-تست‌ها-و-qa)
 - [امنیت](#-امنیت)
 - [مستندات](#-مستندات)
+- [تصاویر محیط تست](#-تصاویر-محیط-تست)
 
 ---
 
@@ -359,7 +361,7 @@ Response: 429 Too Many Requests
 }
 ```
 
-📺 **[مشاهده ویدئوی دمو: Rate Limiting در عمل](docs/rate_limit_login_demo.mp4)**
+📺 **[مشاهده ویدئوی دمو: Rate Limiting در عمل](https://aparat.com/v/kbkj2a6)**
 
 ---
 
@@ -453,6 +455,8 @@ ai-gateway/
 ├── docs/                         # Documentation
 │   ├── test_results/             # Test Reports
 │   ├── screenshots/              # Screenshots
+│   │   ├── postman/              # Postman screenshots
+│   │   └── swagger_ui/           # Swagger UI screenshots
 │   └── rate_limit_login_demo.mp4 # Demo Video
 │
 ├── docker/                       # Docker Configuration
@@ -479,7 +483,7 @@ ai-gateway/
 
 ### 1. کلون کردن پروژه
 ```powershell
-git clone https://github.com/yourusername/ai-gateway.git
+git clone https://github.com/moeinrezai/ai-gateway
 cd ai-gateway
 ```
 
@@ -709,6 +713,36 @@ docker-compose -f docker/docker-compose.yml exec backend uv run pytest --cov=app
 
 ---
 
+## 📸 تصاویر محیط تست
+
+در این بخش اسکرین‌شات‌های گرفته شده از محیط‌های تست (Postman و Swagger UI) قرار دارد.
+
+### 🧪 تست با Postman
+
+| توضیح | تصویر |
+|-------|-------|
+| ثبت‌نام کاربر جدید | ![Register](docs/screenshots/postman/Register.png) |
+| ورود کاربر | ![Login](docs/screenshots/postman/login.png) |
+| نوسازی توکن (Refresh Token) | ![Refresh Token](docs/screenshots/postman/refresh_token.png) |
+| دریافت پروفایل کاربر | ![Users Me](docs/screenshots/postman/users_me.png) |
+| دریافت پروفایل با کوکی‌ها | ![Users Me Cookies](docs/screenshots/postman/users_me_cookies.png) |
+| دریافت پروفایل با هدرها | ![Users Me Headers](docs/screenshots/postman/users_me_headers.png) |
+| لیست جلسات فعال | ![Sessions](docs/screenshots/postman/sessions.png) |
+| حذف یک جلسه | ![Delete Session](docs/screenshots/postman/delete_session_id.png) |
+| ارسال درخواست چت به AI | ![Chat Post](docs/screenshots/postman/chat_post.png) |
+
+### 📄 مستندات Swagger UI
+
+| توضیح | تصویر |
+|-------|-------|
+| صفحه ورود (Login) | ![Swagger Login](docs/screenshots/swagger_ui/login.png) |
+| دریافت پروفایل کاربر | ![Get My Profile](docs/screenshots/swagger_ui/get_my_profile.png) |
+| لیست جلسات | ![Get Sessions](docs/screenshots/swagger_ui/get_sessions.png) |
+| ارسال درخواست چت (نمایش فرم) | ![Chat API Post](docs/screenshots/swagger_ui/chat_api_post.png) |
+| نتیجه درخواست چت | ![Chat API Result](docs/screenshots/swagger_ui/chat_api_post_result.png) |
+
+---
+
 ## 🤝 مشارکت
 
 ما از مشارکت جامعه متن‌باز استقبال می‌کنیم! لطفاً قبل از ارسال Pull Request:
@@ -728,3 +762,6 @@ docker-compose -f docker/docker-compose.yml exec backend uv run pytest --cov=app
 
 <div align="center">
 
+</div>
+
+</div>
