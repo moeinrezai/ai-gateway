@@ -393,7 +393,7 @@ Response: 429 Too Many Requests
 📺 **[مشاهده ویدئوی دمو: Rate Limiting در عمل](https://aparat.com/v/kbkj2a6)**
 
 ---
-
+<div align="ltr>
 ## 📁 Project Structure
 
 ```
@@ -500,7 +500,7 @@ ai-gateway/
 ├── alembic.ini                   # Alembic Config
 └── README.md                     # This File
 ```
-
+</div>
 ---
 
 ## 🚀 دستورات راه‌اندازی
