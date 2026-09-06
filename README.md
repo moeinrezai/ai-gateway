@@ -367,7 +367,7 @@ graph LR
 ### مثال عملی: Rate Limit در Login
 
 **سناریو**: کاربر سعی می‌کند 6 بار در 1 دقیقه لاگین کند
-<div dir="ltr">
+
 ```bash
 # درخواست 1-5: موفق
 POST /api/v1/auth/login
@@ -388,6 +388,7 @@ Response: 429 Too Many Requests
     }
   }
 }
+```
 
 
 📺 **[مشاهده ویدئوی دمو: Rate Limiting در عمل](https://aparat.com/v/kbkj2a6)**
