@@ -390,6 +390,7 @@ Response: 429 Too Many Requests
 }
 ```
 
+
 📺 **[مشاهده ویدئوی دمو: Rate Limiting در عمل](https://aparat.com/v/kbkj2a6)**
 
 ---
