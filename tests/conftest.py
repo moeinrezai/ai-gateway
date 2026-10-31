@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 import pytest_asyncio
 import httpx
@@ -32,10 +34,10 @@ async def flush_redis():
 async def db_session():
     engine = create_async_engine(settings.database_url, echo=False)
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    
+
     async with async_session() as session:
         yield session
-        
+
     await engine.dispose()
 
 
@@ -43,7 +45,7 @@ async def db_session():
 async def override_get_db(db_session):
     async def _get_db():
         yield db_session
-    
+
     app.dependency_overrides[get_db] = _get_db
     yield
     app.dependency_overrides.clear()
@@ -52,10 +54,10 @@ async def override_get_db(db_session):
 @pytest_asyncio.fixture(scope="function")
 async def override_get_redis():
     test_redis = aioredis.from_url(settings.redis_url, decode_responses=True)
-    
+
     async def _get_redis():
         yield test_redis
-        
+
     app.dependency_overrides[get_redis] = _get_redis
     yield
     app.dependency_overrides.clear()
@@ -95,63 +97,69 @@ async def admin_role(db_session):
 
 @pytest_asyncio.fixture(scope="function")
 async def test_user(db_session, user_role):
-    email = fake.email()
+    email = f"test_{uuid.uuid4().hex}@example.com"
     password = "SecurePass123!"
-    
+
     user = User(
         email=email,
         hashed_password=hash_password(password),
         role_id=user_role.id,
-        is_active=True
+        is_active=True,
     )
     db_session.add(user)
     await db_session.commit()
     await db_session.refresh(user)
-    
+
     user.password = password
-    return user
+    yield user
+
+    await db_session.delete(user)
+    await db_session.commit()
 
 
 @pytest_asyncio.fixture(scope="function")
 async def admin_user(db_session, admin_role):
-    email = fake.email()
+    email = f"admin_{uuid.uuid4().hex}@example.com"
     password = "AdminPass123!"
-    
+
     user = User(
         email=email,
         hashed_password=hash_password(password),
         role_id=admin_role.id,
-        is_active=True
+        is_active=True,
     )
     db_session.add(user)
     await db_session.commit()
     await db_session.refresh(user)
-    
+
     user.password = password
-    return user
+    yield user
+
+    await db_session.delete(user)
+    await db_session.commit()
 
 
 @pytest_asyncio.fixture(scope="function")
 async def authenticated_client(client: AsyncClient, test_user):
     login_payload = {
         "email": test_user.email,
-        "password": test_user.password
+        "password": test_user.password,
     }
     response = await client.post(
         f"{settings.APP_API_V1_PREFIX}/auth/login", json=login_payload
     )
-    
+
     if response.status_code != 200:
         raise RuntimeError(
             f"Failed to authenticate test user: {response.status_code} - {response.text}"
         )
-    
+
     client.cookies.update(response.cookies)
-    
+
     csrf_token = response.cookies.get(settings.CSRF_COOKIE_NAME)
     if csrf_token:
         client.headers[settings.CSRF_HEADER_NAME] = csrf_token
-    
+
     return client
 
 
@@ -159,21 +167,21 @@ async def authenticated_client(client: AsyncClient, test_user):
 async def admin_client(client: AsyncClient, admin_user):
     login_payload = {
         "email": admin_user.email,
-        "password": admin_user.password
+        "password": admin_user.password,
     }
     response = await client.post(
         f"{settings.APP_API_V1_PREFIX}/auth/login", json=login_payload
     )
-    
+
     if response.status_code != 200:
         raise RuntimeError(
             f"Failed to authenticate admin user: {response.status_code} - {response.text}"
         )
-    
+
     client.cookies.update(response.cookies)
-    
+
     csrf_token = response.cookies.get(settings.CSRF_COOKIE_NAME)
     if csrf_token:
         client.headers[settings.CSRF_HEADER_NAME] = csrf_token
-    
+
     return client
