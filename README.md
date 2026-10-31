@@ -301,11 +301,12 @@ Cookie: csrf_token=abc123...
 Header: X-CSRF-Token: abc123...
 ```
 - **الگوریتم**: UUID v4
-- **مدت اعتبار**: 1 ساعت
+- **مدت اعتبار کوکی**: همان طول عمر Refresh Token (۷ روز) — تا امکان Refresh پس از دوره بی‌فعالیتی از بین نرود
 - **ویژگی‌ها**:
   - Cookie غیر HttpOnly (قابل خواندن توسط JavaScript)
   - Header در تمام درخواست‌های State-Changing (POST, PUT, DELETE)
   - مقایسه مقدار Cookie با Header
+  - مقدار CSRF در طول عمر یک Session ثابت است (در هر Refresh تغییر نمی‌کند)
 
 ### جریان کامل Login
 
@@ -360,8 +361,8 @@ graph LR
 |----------|-------|--------|-------|
 | `/api/v1/auth/login` | 5 | 1 دقیقه | IP |
 | `/api/v1/auth/register` | 3 | 1 دقیقه | IP |
-| `/api/v1/ai/chat` | 20 | 1 دقیقه | IP + User |
-| `/api/v1/ai/generate` | 10 | 1 دقیقه | IP + User |
+| `/api/v1/ai/chat` | 20 | 1 دقیقه | IP |
+| `/api/v1/ai/generate` | 20 | 1 دقیقه | IP |
 | سایر Endpoints | 100 | 1 دقیقه | IP |
 
 ### مثال عملی: Rate Limit در Login

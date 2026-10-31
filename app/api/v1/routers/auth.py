@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Request, Response
 from app.api.dependencies.auth import get_current_session, get_refresh_token_from_cookie
-from app.api.dependencies.rate_limit import AuthRateLimiter
+from app.api.dependencies.rate_limit import LoginRateLimiter, RegisterRateLimiter
 from app.api.dependencies.services import get_auth_service, get_session_service, get_user_service
 from app.core.config.settings import settings
 from app.models.session import Session
@@ -22,6 +22,9 @@ def _set_auth_cookies(
     csrf_token: str,
 ) -> None:
     is_secure = settings.APP_ENV == "production"
+    # The CSRF cookie must outlive the refresh token; otherwise the client
+    # loses the ability to refresh after its idle period.
+    refresh_max_age = settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60
     
     response.set_cookie(
         key="access_token",
@@ -39,7 +42,7 @@ def _set_auth_cookies(
         httponly=True,
         secure=is_secure,
         samesite="lax", 
-        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
+        max_age=refresh_max_age,
         path=f"{settings.APP_API_V1_PREFIX}", 
     )
     
@@ -49,7 +52,7 @@ def _set_auth_cookies(
         httponly=False,
         secure=settings.CSRF_COOKIE_SECURE,
         samesite=settings.CSRF_COOKIE_SAMESITE,
-        max_age=settings.CSRF_COOKIE_MAX_AGE,
+        max_age=refresh_max_age,
         path=settings.CSRF_COOKIE_PATH,
     )
 
@@ -75,7 +78,7 @@ async def register(
     request: Request,
     response: Response,
     auth_service: AuthService = Depends(get_auth_service),
-    _: None = Depends(AuthRateLimiter()),
+    _: None = Depends(RegisterRateLimiter()),
 ):
     user, _, access_token, refresh_token, csrf_token = await auth_service.register(
         email=payload.email,
@@ -93,7 +96,7 @@ async def login(
     request: Request,
     response: Response,
     auth_service: AuthService = Depends(get_auth_service),
-    _: None = Depends(AuthRateLimiter()),
+    _: None = Depends(LoginRateLimiter()),
 ):
     user, _, access_token, refresh_token, csrf_token = await auth_service.login(
         email=payload.email,
@@ -119,12 +122,19 @@ async def logout(
 
 @router.post("/refresh", response_model=SuccessResponse)
 async def refresh(
+    request: Request,
     response: Response,
     refresh_token_str: str = Depends(get_refresh_token_from_cookie),
     auth_service: AuthService = Depends(get_auth_service),
 ):
-    new_access_token, new_refresh_token, new_csrf_token = await auth_service.refresh_tokens(refresh_token_str)
-    _set_auth_cookies(response, new_access_token, new_refresh_token, new_csrf_token)
+    # The CSRF token stays stable per session: rotating it on every refresh
+    # would invalidate the token the client already has in its header.
+    csrf_token = request.cookies.get(settings.CSRF_COOKIE_NAME)
+    new_access_token, new_refresh_token, csrf_token = await auth_service.refresh_tokens(
+        refresh_token_str,
+        current_csrf_token=csrf_token,
+    )
+    _set_auth_cookies(response, new_access_token, new_refresh_token, csrf_token)
     return SuccessResponse(message="Tokens refreshed successfully.")
 
 

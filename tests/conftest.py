@@ -1,4 +1,3 @@
-import uuid
 import pytest
 import pytest_asyncio
 import httpx
@@ -177,4 +176,4 @@ async def admin_client(client: AsyncClient, admin_user):
     if csrf_token:
         client.headers[settings.CSRF_HEADER_NAME] = csrf_token
     
-    return admin_user, client
+    return client

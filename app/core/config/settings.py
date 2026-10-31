@@ -98,9 +98,5 @@ class Settings(BaseSettings):
         default="/",
         description="Path for CSRF cookie",
     )
-    CSRF_COOKIE_MAX_AGE: int = Field(
-        default=3600,
-        description="Max age for CSRF cookie in seconds (default: 1 hour)",
-    )
 
 settings = Settings()

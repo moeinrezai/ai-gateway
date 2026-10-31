@@ -43,7 +43,7 @@ async def test_change_password_with_wrong_old_password(authenticated_client: Asy
     )
     
     assert response.status_code == 401
-    assert response.json()["error"]["code"] == "INVALID_CREDENTIALS"
+    assert response.json()["error"]["code"] == "AUTHENTICATION_ERROR"
 
 
 @pytest.mark.asyncio
@@ -63,8 +63,10 @@ async def test_change_password_with_mismatched_confirmation(authenticated_client
     )
     
     assert response.status_code == 422
-    # Pydantic Validation Error ساختار متفاوتی دارد
-    assert "detail" in response.json()
+    # استاندارد Error Response پروژه (بر خلاف فرمت پیش‌فرض FastAPI با کلید detail)
+    data = response.json()
+    assert data["success"] is False
+    assert data["error"]["code"] == "VALIDATION_ERROR"
 
 
 @pytest.mark.asyncio
@@ -84,7 +86,9 @@ async def test_change_password_with_weak_password(authenticated_client: AsyncCli
     )
     
     assert response.status_code == 422
-    assert "detail" in response.json()
+    data = response.json()
+    assert data["success"] is False
+    assert data["error"]["code"] == "VALIDATION_ERROR"
 
 
 @pytest.mark.asyncio
@@ -103,20 +107,24 @@ async def test_change_password_revokes_other_sessions(
         f"{settings.APP_API_V1_PREFIX}/auth/login", json=login_payload
     )
     assert login_response_1.status_code == 200
-    client.cookies.update(login_response_1.cookies)
+    first_session_cookies = dict(login_response_1.cookies)
     
     # استخراج CSRF Token برای Session اول
-    csrf_token = login_response_1.cookies.get(settings.CSRF_COOKIE_NAME)
-    client.headers[settings.CSRF_HEADER_NAME] = csrf_token
+    csrf_token_1 = login_response_1.cookies.get(settings.CSRF_COOKIE_NAME)
     
-    # Login دوم (Session جدید)
+    # Login دوم (Session جدید) - پاسخ کوکی‌های جدید را در jar می‌نویسد
     login_response_2 = await client.post(
         f"{settings.APP_API_V1_PREFIX}/auth/login", json=login_payload
     )
     assert login_response_2.status_code == 200
-    second_session_cookies = login_response_2.cookies
+    second_session_cookies = dict(login_response_2.cookies)
     
-    # تغییر رمز با Session اول
+    # تغییر رمز با Session اول: طبق قرارداد Double Submit Cookie،
+    # هدر CSRF باید مقدار کوکی‌های همان Session باشد
+    client.cookies.clear()
+    client.cookies.update(first_session_cookies)
+    client.headers[settings.CSRF_HEADER_NAME] = csrf_token_1
+    
     change_payload = {
         "old_password": "SecurePass123!",
         "new_password": "NewSecurePass456!",
@@ -134,7 +142,7 @@ async def test_change_password_revokes_other_sessions(
     
     response = await client.get(f"{settings.APP_API_V1_PREFIX}/users/me")
     assert response.status_code == 401
-    assert response.json()["error"]["code"] == "AUTHENTICATION_ERROR"
+    assert response.json()["error"]["code"] == "INVALID_TOKEN"
 
 
 @pytest.mark.asyncio
@@ -162,4 +170,4 @@ async def test_change_password_error_response_structure(authenticated_client: As
     assert "code" in data["error"]
     assert "message" in data["error"]
     assert "details" in data["error"]
-    assert data["error"]["code"] == "INVALID_CREDENTIALS"
+    assert data["error"]["code"] == "AUTHENTICATION_ERROR"

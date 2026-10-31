@@ -20,6 +20,13 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# add_middleware prepends, so the last added middleware runs first (outermost).
+# Execution order: CORS → TrustedProxy → RequestID → CSRF → routes.
+app.add_middleware(CSRFMiddleware)
+app.add_middleware(RequestIDMiddleware)
+app.add_middleware(TrustedProxyMiddleware)
+# CORSMiddleware must be the outermost layer so its headers reach the browser
+# even when an inner middleware (e.g. CSRF) returns an error response.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -27,10 +34,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app.add_middleware(TrustedProxyMiddleware)
-app.add_middleware(RequestIDMiddleware)
-app.add_middleware(CSRFMiddleware)
 
 register_exception_handlers(app)
 

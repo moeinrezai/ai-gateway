@@ -91,8 +91,10 @@ class AuthService:
 
         return user, session, access_token, refresh_token, csrf_token
 
-    async def refresh_tokens(self, refresh_token_str: str) -> tuple[str, str, str]:
-      
+    async def refresh_tokens(
+        self, refresh_token_str: str, current_csrf_token: str | None = None
+    ) -> tuple[str, str, str]:
+
         payload = decode_token(refresh_token_str, "refresh")
         jti = payload["jti"]
         session_id = payload["sid"]
@@ -122,9 +124,8 @@ class AuthService:
             raise InvalidTokenError("User not found.")
 
      
-        new_csrf_token = generate_csrf_token()
+        new_csrf_token = current_csrf_token or generate_csrf_token()
 
-       
         new_access_token = create_access_token(user.id, session.id, user.role.name, new_csrf_token)
         new_refresh_token = create_refresh_token(user.id, session.id)
 

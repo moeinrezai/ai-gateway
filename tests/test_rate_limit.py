@@ -67,7 +67,7 @@ async def test_ai_chat_rate_limit(authenticated_client: AsyncClient):
     باید بعد از 20 درخواست، درخواست بیست و یکم با 429 مسدود شود
     """
     payload = {
-        "model": "gpt-3.5-turbo",
+        "model": "mock-model",
         "messages": [{"role": "user", "content": "Hello"}],
         "temperature": 0.7,
         "max_tokens": 10,

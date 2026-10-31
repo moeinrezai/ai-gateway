@@ -83,7 +83,9 @@ async def test_error_response_standard_format_validation_error(client: AsyncClie
     
     assert response.status_code == 422
     data = response.json()
-    assert "detail" in data
+    assert data["success"] is False
+    assert data["error"]["code"] == "VALIDATION_ERROR"
+    assert "message" in data["error"]
 
 
 @pytest.mark.asyncio

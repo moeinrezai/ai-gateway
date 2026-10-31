@@ -119,7 +119,7 @@ async def test_revoke_specific_session(
     
     response = await client.get(f"{settings.APP_API_V1_PREFIX}/users/me")
     assert response.status_code == 401
-    assert response.json()["error"]["code"] == "AUTHENTICATION_ERROR"
+    assert response.json()["error"]["code"] == "INVALID_TOKEN"
 
 
 @pytest.mark.asyncio

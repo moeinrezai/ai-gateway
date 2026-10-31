@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from httpx import AsyncClient
 
@@ -6,6 +8,30 @@ from app.core.config.settings import settings
 
 @pytest.mark.asyncio
 async def test_ai_chat_success(authenticated_client: AsyncClient):
+    # Hermetic: uses the MockProvider so the request/response pipeline is
+    # verified without external network access (VPN, API quota, key access).
+    payload = {
+        "model": "mock-model",
+        "messages": [{"role": "user", "content": "Hello"}],
+        "temperature": 0.7,
+        "max_tokens": 50
+    }
+    response = await authenticated_client.post(
+        f"{settings.APP_API_V1_PREFIX}/ai/chat", json=payload
+    )
+    
+    assert response.status_code == 200
+    data = response.json()
+    assert "message" in data
+    assert data["provider"] == "mock"
+
+
+@pytest.mark.asyncio
+async def test_ai_chat_live_openai(authenticated_client: AsyncClient):
+    # Live integration with OpenAI (external network, real API key and quota).
+    # Opt in with AI_LIVE_TESTS=1.
+    if not os.getenv("AI_LIVE_TESTS"):
+        pytest.skip("Live OpenAI integration disabled; set AI_LIVE_TESTS=1 to run.")
     payload = {
         "model": "gpt-3.5-turbo",
         "messages": [{"role": "user", "content": "Hello"}],
